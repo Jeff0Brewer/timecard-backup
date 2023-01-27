@@ -16,7 +16,7 @@ export default function Home () {
                 session?.user?.email
                     ? <>
                         <button onClick={() => signOut()}>log out</button>
-                        <ClockIn userId={session.user.email}/>
+                        <ClockIn userEmail={session.user.email}/>
                     </>
                     : <button onClick={() => signIn()}>log in</button>
             }
