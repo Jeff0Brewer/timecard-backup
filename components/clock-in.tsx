@@ -1,6 +1,7 @@
 import React, { FC, useState, useEffect } from 'react'
 import { getTimeString, getDateString } from '@/lib/date-util'
 import type { EntryData } from '@/lib/types'
+import styles from '@/styles/ClockIn.module.css'
 
 const postBody = (data: object) => {
     return {
@@ -53,11 +54,11 @@ const ClockIn: FC<ClockInProps> = props => {
     }, [])
 
     return (
-        <>
-            <p>{getDateString(displayTime)}</p>
-            <p>{getTimeString(displayTime)}</p>
-            <button onClick={clockIn}>Clock {clockInState ? 'Out' : 'In'}</button>
-        </>
+        <section className={styles.wrap}>
+            <p className={styles.date}>{getDateString(displayTime)}</p>
+            <p className={styles.time}>{getTimeString(displayTime)}</p>
+            <button className={styles.clockIn} onClick={clockIn}>Clock {clockInState ? 'Out' : 'In'}</button>
+        </section>
     )
 }
 

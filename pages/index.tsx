@@ -1,8 +1,9 @@
 import React from 'react'
 import Head from 'next/head'
-import { useSession, signIn, signOut } from 'next-auth/react'
+import { useSession, signOut } from 'next-auth/react'
 import ClockIn from '@/components/clock-in'
-// import styles from '@/styles/Home.module.css'
+import SignIn from '@/components/sign-in'
+import styles from '@/styles/Home.module.css'
 
 export default function Home () {
     const { data: session } = useSession()
@@ -12,14 +13,15 @@ export default function Home () {
                 <title>Timecard</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
-            </Head>{
+            </Head>
+            <main className={styles.home}>{
                 session?.user?.email
-                    ? <>
-                        <button onClick={() => signOut()}>log out</button>
+                    ? <div>
+                        <button className={styles.signOut} onClick={() => signOut()}>log out</button>
                         <ClockIn userEmail={session.user.email}/>
-                    </>
-                    : <button onClick={() => signIn()}>log in</button>
-            }
+                    </div>
+                    : <SignIn />
+            }</main>
         </>
     )
 }
