@@ -17,6 +17,7 @@ const ClockIn: FC<ClockInProps> = props => {
         <>
             <p>{getDateString(displayTime)}</p>
             <p>{getTimeString(displayTime)}</p>
+            <button>Clock In</button>
         </>
     )
 }
