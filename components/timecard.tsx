@@ -1,9 +1,9 @@
 import React, { FC, useState, useEffect } from 'react'
-import { RiDeleteBack2Fill, RiDeleteBack2Line } from 'react-icons/ri'
 import type { EntryData } from '@/lib/types'
-import { getNextWeek, getPrevWeek, getDateString, getTimeString } from '@/lib/date-util'
+import { getNextWeek, getPrevWeek } from '@/lib/date-util'
 import { postBody } from '@/lib/fetch-util'
 import ClockIn from '@/components/clock-in'
+import DayDisplay from '@/components/day-display'
 import styles from '@/styles/Timecard.module.css'
 
 type TimecardProps = {
@@ -65,47 +65,8 @@ const Timecard: FC<TimecardProps> = props => {
     return (
         <section>
             <ClockIn userEmail={props.userEmail} updateTimecard={getEntries} />
-            <div>
-                <span className={styles.entryRow}>
-                    <p className={styles.entryDay}>Day</p>
-                    <p className={styles.entryIn}>In</p>
-                    <p className={styles.entryOut}>Out</p>
-                </span>
-                { displayEntries() }
-            </div>
+            <div> { displayEntries() } </div>
         </section>
-    )
-}
-
-type DayDisplayProps = {
-    in: EntryData,
-    out: EntryData,
-    delete: (ids: Array<string | undefined>) => void
-}
-
-const DayDisplay: FC<DayDisplayProps> = props => {
-    const [deleteVisible, setDeleteVisible] = useState<boolean>(false)
-
-    return (
-        <span
-            className={styles.entryRow}
-            onClick={() => setDeleteVisible(true)}
-            onMouseEnter={() => setDeleteVisible(true)}
-            onMouseLeave={() => setDeleteVisible(false)}
-        >
-            <p className={styles.entryDay}>{getDateString(props.in.date)}</p>
-            <p className={styles.entryIn}>{getTimeString(props.in.date)}</p>
-            <p className={styles.entryOut}>{getTimeString(props.out.date)}</p>
-            <button
-                className={`${styles.entryDelete} ${deleteVisible ? styles.entryDeleteVisible : ''}`}
-                onMouseDown={() => props.delete([props.in?.id, props.out?.id])}
-            >
-                <RiDeleteBack2Line />
-                <div className={styles.entryDeleteHover}>
-                    <RiDeleteBack2Fill />
-                </div>
-            </button>
-        </span>
     )
 }
 

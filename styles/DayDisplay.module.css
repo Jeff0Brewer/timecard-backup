@@ -1,0 +1,50 @@
+.row {
+    width: 100vw;
+    max-width: 500px;
+    display: flex;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    border: solid #fff;
+    border-width: 1px 0 0 0;
+}
+
+.row > * {
+    text-align: center;
+    margin: 15px 0;
+}
+
+.day {
+    width: 50%;
+}
+
+.in, .out {
+    width: 25%;
+}
+
+.delete {
+    position: relative;
+    width: 0;
+    overflow: hidden;
+    border: none;
+    font-size: 22px;
+    transition: width .3s ease;
+}
+
+.deleteVisible {
+    width: 40px;
+}
+
+.deleteHover {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    transition: opacity .3s ease;
+    background-color: #000;
+}
+
+.delete:hover .deleteHover {
+    opacity: 1;
+}
