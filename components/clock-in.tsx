@@ -5,7 +5,8 @@ import { postBody } from '@/lib/fetch-util'
 import styles from '@/styles/ClockIn.module.css'
 
 type ClockInProps = {
-    userEmail: string
+    userEmail: string,
+    updateTimecard: () => void
 }
 
 const ClockIn: FC<ClockInProps> = props => {
@@ -21,22 +22,19 @@ const ClockIn: FC<ClockInProps> = props => {
 
     // clock in / out based on current clock state
     const clockIn = async () => {
-        // track initial clock state to revert if request fails
-        const initClockState = clockInState
-        setClockInState(!initClockState)
-
         const entry: EntryData = {
             date: new Date(),
-            clockIn: !initClockState,
+            clockIn: !clockInState,
             userEmail: props.userEmail
         }
+        setClockInState(!clockInState)
         const res = await fetch('/api/add-entry', postBody(entry))
-
         if (res.status !== 200) {
-            // revert clock state on failure
+            getClockInState() // revert clock state on failure
             const { message } = await res.json()
             console.log(message)
-            setClockInState(!initClockState)
+        } else {
+            props.updateTimecard()
         }
     }
 

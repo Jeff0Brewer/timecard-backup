@@ -51,9 +51,15 @@ const getPrevWeek = (date: Date) => {
     return date
 }
 
+const getNextWeek = (date: Date) => {
+    date.setDate(date.getDate() + 7)
+    return date
+}
+
 export {
     getTimeString,
     getDateStringLong,
     getDateString,
-    getPrevWeek
+    getPrevWeek,
+    getNextWeek
 }
