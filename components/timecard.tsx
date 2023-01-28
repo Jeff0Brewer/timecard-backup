@@ -35,6 +35,7 @@ const Timecard: FC<TimecardProps> = props => {
         // entries are clock in / clock out pairs
         if (entries[0].clockIn) { entries.shift() }
         if (!entries[entries.length - 1].clockIn) { entries.pop() }
+
         const entryPairs: Array<EntryPair> = []
         entries.reduce((out, _, i, arr) => {
             if (i % 2 === 0) {
@@ -90,7 +91,7 @@ const Timecard: FC<TimecardProps> = props => {
 
 type DayDisplayProps = {
     pair: EntryPair,
-    deleteEntries: (ids: Array<EntryData>) => void
+    deleteEntry: (pair: EntryPair) => void
 }
 
 const DayDisplay: FC<DayDisplayProps> = props => {
