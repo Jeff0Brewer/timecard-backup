@@ -1,7 +1,14 @@
+type CustomStart = {
+    hour: number,
+    minute: number,
+    ampm: string
+}
+
 type EntryData = {
     date: Date,
     clockIn: boolean,
-    userEmail: string
+    userEmail: string,
+    id?: string
 }
 
 const isEntryData = (x: any) => {
@@ -13,10 +20,21 @@ const isEntryData = (x: any) => {
     )
 }
 
+const newEntryData = () => {
+    const entry: EntryData = {
+        date: new Date(),
+        clockIn: true,
+        userEmail: ''
+    }
+    return entry
+}
+
 export {
-    isEntryData
+    isEntryData,
+    newEntryData
 }
 
 export type {
-    EntryData
+    EntryData,
+    CustomStart
 }

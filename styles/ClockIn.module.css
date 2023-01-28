@@ -2,10 +2,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 80px 0;
 }
 
 .date, .time {
-    font-family: Arial, Helvetica, sans-serif;
     margin: 5px;
 }
 
