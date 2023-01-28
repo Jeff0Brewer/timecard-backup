@@ -56,10 +56,26 @@ const getNextWeek = (date: Date) => {
     return date
 }
 
+const getDateHours = (date: Date) => {
+    const hours = date.getHours() % 12
+    return hours || 12 // if hours is 0 replace with 12
+}
+
+const getDateMinutes = (date: Date) => {
+    return date.getMinutes() + 1
+}
+
+const getDateAmPm = (date: Date) => {
+    return date.getHours() <= 11 ? 'am' : 'pm'
+}
+
 export {
     getTimeString,
     getDateStringLong,
     getDateString,
     getPrevWeek,
-    getNextWeek
+    getNextWeek,
+    getDateHours,
+    getDateMinutes,
+    getDateAmPm
 }
