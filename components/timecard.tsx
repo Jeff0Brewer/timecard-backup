@@ -54,7 +54,6 @@ const Timecard: FC<TimecardProps> = props => {
             if (!entry.clockIn) { pairs.push([entries[i + 1], entries[i]]) }
             return pairs
         }, entryPairs)
-        console.log(entryPairs)
         return entryPairs.map((pair, i) =>
             <DayDisplay in={pair[0]} out={pair[1]} delete={deleteEntries} key={i} />
         )
