@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react'
 import { HiArrowNarrowRight } from 'react-icons/hi'
 import type { EntryData } from '@/lib/types'
-import { getNextWeek, getPrevWeek } from '@/lib/date-util'
+import { getNextWeek, getPrevWeek, hourFromMs, getTwoDigitMinutes } from '@/lib/date-util'
 import { postBody } from '@/lib/fetch-util'
 import ClockIn from '@/components/clock-in'
 import DayDisplay from '@/components/day-display'
@@ -56,8 +56,20 @@ const Timecard: FC<TimecardProps> = props => {
             if (!entry.clockIn) { pairs.push([entries[i + 1], entries[i]]) }
             return pairs
         }, entryPairs)
-        return entryPairs.map((pair, i) =>
+        let hoursWorked = 0
+        entryPairs.forEach(pair => {
+            hoursWorked += hourFromMs(pair[1].date.getTime() - pair[0].date.getTime())
+        })
+        const minutesWorked = Math.floor((hoursWorked % 1) * 60)
+        hoursWorked = Math.floor(hoursWorked)
+        const dayDisplays = entryPairs.map((pair, i) =>
             <DayDisplay in={pair[0]} out={pair[1]} delete={deleteEntries} key={i} />
+        )
+        return (
+            <div>
+                {dayDisplays}
+                {<p className={styles.totalHours}>{`hours worked: ${hoursWorked}:${getTwoDigitMinutes(minutesWorked)}`}</p>}
+            </div>
         )
     }
 
@@ -69,7 +81,7 @@ const Timecard: FC<TimecardProps> = props => {
         <section>
             <ClockIn userEmail={props.userEmail} updateTimecard={getEntries} />
             <span
-                className={`${styles.bounds} ${visibleEntries.length > 1 ? '' : styles.hidden}`}
+                className={styles.bounds}
             >
                 <div className={styles.boundInput}>
                     <DateInput value={minTime} setValue={setMinTime} />
@@ -78,7 +90,7 @@ const Timecard: FC<TimecardProps> = props => {
                 </div>
                 <button className={styles.boundUpdate} onClick={getEntries}>update</button>
             </span>
-            <div> { displayEntries() } </div>
+            { displayEntries() }
         </section>
     )
 }

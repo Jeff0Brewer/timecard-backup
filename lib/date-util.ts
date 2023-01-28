@@ -77,6 +77,15 @@ const dateFromCustomStart = (custom: CustomStart) => {
     return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, custom.minute)
 }
 
+const hourFromMs = (ms: number) => {
+    return ms / (1000 * 60 * 60)
+}
+
+const getTwoDigitMinutes = (min: number) => {
+    if (min < 10) return '0' + min
+    return min.toString()
+}
+
 export {
     getTimeString,
     getDateStringLong,
@@ -86,5 +95,7 @@ export {
     getDateMonth,
     getDateHours,
     getDateAmPm,
-    dateFromCustomStart
+    dateFromCustomStart,
+    hourFromMs,
+    getTwoDigitMinutes
 }
