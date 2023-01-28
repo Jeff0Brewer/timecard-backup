@@ -23,7 +23,6 @@ const getEntries = async (req: NextApiRequest, res: NextApiResponse<EntriesRes>)
         }
     }
     const entries: Array<EntryData> = await prisma.timeEntry?.findMany(query)
-    console.log(entries)
     res.status(200).send(entries)
 }
 

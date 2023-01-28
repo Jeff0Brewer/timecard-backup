@@ -63,7 +63,7 @@ const Timecard: FC<TimecardProps> = props => {
                     <p className={styles.entryOut}>Out</p>
                 </span>{
                     visibleEntries.map((pair: EntryPair, i: number) =>
-                        <DayDisplay in={pair.in} out={pair.out} key={i}/>
+                        <DayDisplay in={pair.in} out={pair.out} update={updateEntries} key={i}/>
                     )
                 }</div>
         </section>
@@ -72,11 +72,21 @@ const Timecard: FC<TimecardProps> = props => {
 
 type DayDisplayProps = {
     in: EntryData,
-    out: EntryData
+    out: EntryData,
+    update: () => void
 }
 
 const DayDisplay: FC<DayDisplayProps> = props => {
     const [deleteVisible, setDeleteVisible] = useState<boolean>(false)
+
+    const deleteEntries = async (ids: Array<string>) => {
+        const res = await fetch('/api/delete-entries', postBody({ ids }))
+        if (res.status !== 200) {
+            const { message } = await res.json()
+            console.log(message)
+        }
+        props.update()
+    }
 
     return (
         <span
@@ -90,6 +100,7 @@ const DayDisplay: FC<DayDisplayProps> = props => {
             <p className={styles.entryOut}>{getTimeString(props.out.date)}</p>
             <button
                 className={`${styles.entryDelete} ${deleteVisible ? styles.entryDeleteVisible : ''}`}
+                onMouseDown={() => deleteEntries([props.in.id, props.out.id])}
             >
                 <RiDeleteBack2Line />
                 <div className={styles.entryDeleteHover}>
