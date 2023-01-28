@@ -1,7 +1,9 @@
 .row {
     width: 100vw;
+    height: 50px;
     max-width: 500px;
     display: flex;
+    align-items: center;
     font-size: 14px;
     border: solid #fff;
     border-width: 1px 0 0 0;
@@ -9,7 +11,6 @@
 
 .row > * {
     text-align: center;
-    margin: 15px 0;
 }
 
 .day {
@@ -25,8 +26,14 @@
     width: 0;
     overflow: hidden;
     border: none;
-    font-size: 22px;
     transition: width .3s ease;
+}
+
+.delete, .deleteHover {
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .deleteVisible {
