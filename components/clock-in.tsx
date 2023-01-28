@@ -32,9 +32,9 @@ const ClockIn: FC<ClockInProps> = props => {
         }
         const res = await fetch('/api/add-entry', postBody(entry))
 
-        // revert clock state on failure
         if (res.status !== 200) {
-            const message = await res.json()
+            // revert clock state on failure
+            const { message } = await res.json()
             console.log(message)
             setClockInState(!initClockState)
         }

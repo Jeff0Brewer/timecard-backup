@@ -20,7 +20,7 @@ const Timecard: FC<TimecardProps> = props => {
     const [maxTime, setMaxTime] = useState<Date>(new Date())
     const [minTime, setMinTime] = useState<Date>(getPrevWeek(new Date()))
 
-    const updateEntries = async () => {
+    const getEntries = async () => {
         const res = await fetch('/api/get-entries', postBody({
             userEmail: props.userEmail,
             minTime,
@@ -49,8 +49,26 @@ const Timecard: FC<TimecardProps> = props => {
         setVisibleEntries(entryPairs)
     }
 
+    const deleteEntry = async (pair: EntryPair) => {
+        setVisibleEntries(
+            visibleEntries
+                .filter(entry => (
+                    entry.in?.id !== pair.in?.id ||
+                    entry.out?.id !== pair.out?.id
+                ))
+        )
+        const ids = [pair.in?.id, pair.out?.id].filter(id => id)
+        const res = await fetch('/api/delete-entries', postBody({ ids }))
+        if (res.status !== 200) {
+            // revert client side deletion if db operation failed
+            setVisibleEntries([pair, ...visibleEntries])
+            const { message } = await res.json()
+            console.log(message)
+        }
+    }
+
     useEffect(() => {
-        updateEntries()
+        getEntries()
     }, [])
 
     return (
@@ -63,7 +81,7 @@ const Timecard: FC<TimecardProps> = props => {
                     <p className={styles.entryOut}>Out</p>
                 </span>{
                     visibleEntries.map((pair: EntryPair, i: number) =>
-                        <DayDisplay in={pair.in} out={pair.out} update={updateEntries} key={i}/>
+                        <DayDisplay pair={pair} deleteEntry={deleteEntry} key={i}/>
                     )
                 }</div>
         </section>
@@ -71,22 +89,12 @@ const Timecard: FC<TimecardProps> = props => {
 }
 
 type DayDisplayProps = {
-    in: EntryData,
-    out: EntryData,
-    update: () => void
+    pair: EntryPair,
+    deleteEntries: (ids: Array<EntryData>) => void
 }
 
 const DayDisplay: FC<DayDisplayProps> = props => {
     const [deleteVisible, setDeleteVisible] = useState<boolean>(false)
-
-    const deleteEntries = async (ids: Array<string>) => {
-        const res = await fetch('/api/delete-entries', postBody({ ids }))
-        if (res.status !== 200) {
-            const { message } = await res.json()
-            console.log(message)
-        }
-        props.update()
-    }
 
     return (
         <span
@@ -95,12 +103,12 @@ const DayDisplay: FC<DayDisplayProps> = props => {
             onMouseEnter={() => setDeleteVisible(true)}
             onMouseLeave={() => setDeleteVisible(false)}
         >
-            <p className={styles.entryDay}>{getDateString(props.in.date)}</p>
-            <p className={styles.entryIn}>{getTimeString(props.in.date)}</p>
-            <p className={styles.entryOut}>{getTimeString(props.out.date)}</p>
+            <p className={styles.entryDay}>{getDateString(props.pair.in.date)}</p>
+            <p className={styles.entryIn}>{getTimeString(props.pair.in.date)}</p>
+            <p className={styles.entryOut}>{getTimeString(props.pair.out.date)}</p>
             <button
                 className={`${styles.entryDelete} ${deleteVisible ? styles.entryDeleteVisible : ''}`}
-                onMouseDown={() => deleteEntries([props.in.id, props.out.id])}
+                onMouseDown={() => props.deleteEntry(props.pair)}
             >
                 <RiDeleteBack2Line />
                 <div className={styles.entryDeleteHover}>
