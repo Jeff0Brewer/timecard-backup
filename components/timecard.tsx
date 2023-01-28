@@ -4,6 +4,7 @@ import { getNextWeek, getPrevWeek } from '@/lib/date-util'
 import { postBody } from '@/lib/fetch-util'
 import ClockIn from '@/components/clock-in'
 import DayDisplay from '@/components/day-display'
+import DateInput from '@/components/date-input'
 import styles from '@/styles/Timecard.module.css'
 
 type TimecardProps = {
@@ -66,6 +67,11 @@ const Timecard: FC<TimecardProps> = props => {
     return (
         <section>
             <ClockIn userEmail={props.userEmail} updateTimecard={getEntries} />
+            <span>
+                <DateInput value={minTime} setValue={setMinTime} />
+                <DateInput value={maxTime} setValue={setMaxTime} />
+                <button onClick={getEntries}>update</button>
+            </span>
             <div> { displayEntries() } </div>
         </section>
     )

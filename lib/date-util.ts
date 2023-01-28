@@ -58,13 +58,13 @@ const getNextWeek = (date: Date) => {
     return date
 }
 
+const getDateMonth = (date: Date) => {
+    return date.getMonth() + 1
+}
+
 const getDateHours = (date: Date) => {
     const hours = date.getHours() % 12
     return hours || 12 // if hours is 0 replace with 12
-}
-
-const getDateMinutes = (date: Date) => {
-    return date.getMinutes()
 }
 
 const getDateAmPm = (date: Date) => {
@@ -83,8 +83,8 @@ export {
     getDateString,
     getPrevWeek,
     getNextWeek,
+    getDateMonth,
     getDateHours,
-    getDateMinutes,
     getDateAmPm,
     dateFromCustomStart
 }

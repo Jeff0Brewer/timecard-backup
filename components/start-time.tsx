@@ -1,6 +1,6 @@
 import React, { FC, useState, useRef, useEffect } from 'react'
 import type { EntryData, CustomStart } from '@/lib/types'
-import { getTimeString, getDateHours, getDateMinutes, getDateAmPm } from '@/lib/date-util'
+import { getTimeString, getDateHours, getDateAmPm } from '@/lib/date-util'
 import styles from '@/styles/StartTime.module.css'
 
 type StartTimeProps = {
@@ -37,7 +37,7 @@ const StartTime: FC<StartTimeProps> = props => {
                 ? <p>{getTimeString(props.lastEntry.date)}</p>
                 : <div>
                     <input ref={hourRef} onInput={updateCustomStart} type="text" defaultValue={getDateHours(now)} />
-                    <input ref={minuteRef} onInput={updateCustomStart} type="text" defaultValue={getDateMinutes(now)} />
+                    <input ref={minuteRef} onInput={updateCustomStart} type="text" defaultValue={now.getMinutes()} />
                     <Toggle a="am" b="pm" value={ampm} setValue={v => setAmpm(v)} />
                 </div> }
         </span>
