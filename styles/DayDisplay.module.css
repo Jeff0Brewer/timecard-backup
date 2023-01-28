@@ -44,6 +44,10 @@
     background-color: #000;
 }
 
+.delete:hover {
+    background-color: transparent;
+}
+
 .delete:hover .deleteHover {
     opacity: 1;
 }

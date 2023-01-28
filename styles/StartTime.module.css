@@ -30,3 +30,7 @@
     cursor: pointer;
     font-size: inherit;
 }
+
+.toggle:hover {
+    opacity: var(--hover-opacity);
+}
