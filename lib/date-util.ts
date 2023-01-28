@@ -1,3 +1,5 @@
+import type { CustomStart } from '@/lib/types'
+
 const WEEKDAYS = [
     'Sunday',
     'Monday',
@@ -62,11 +64,17 @@ const getDateHours = (date: Date) => {
 }
 
 const getDateMinutes = (date: Date) => {
-    return date.getMinutes() + 1
+    return date.getMinutes()
 }
 
 const getDateAmPm = (date: Date) => {
     return date.getHours() <= 11 ? 'am' : 'pm'
+}
+
+const dateFromCustomStart = (custom: CustomStart) => {
+    const hours = (custom.hour % 12) + (custom.ampm === 'pm' ? 12 : 0)
+    const now = new Date()
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, custom.minute)
 }
 
 export {
@@ -77,5 +85,6 @@ export {
     getNextWeek,
     getDateHours,
     getDateMinutes,
-    getDateAmPm
+    getDateAmPm,
+    dateFromCustomStart
 }

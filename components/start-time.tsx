@@ -1,24 +1,44 @@
-import React, { FC, useState } from 'react'
-import type { EntryData } from '@/lib/types'
+import React, { FC, useState, useRef, useEffect } from 'react'
+import type { EntryData, CustomStart } from '@/lib/types'
 import { getTimeString, getDateHours, getDateMinutes, getDateAmPm } from '@/lib/date-util'
 import styles from '@/styles/StartTime.module.css'
 
 type StartTimeProps = {
-    lastEntry: EntryData | null
+    lastEntry: EntryData | null,
+    setCustomStart: (custom: CustomStart) => void
 }
 
 const StartTime: FC<StartTimeProps> = props => {
-    if (!props.lastEntry) return <></>
+    const now = new Date()
+    const hourRef = useRef<HTMLInputElement>(null)
+    const minuteRef = useRef<HTMLInputElement>(null)
+    const [ampm, setAmpm] = useState<string>(getDateAmPm(now))
 
+    const updateCustomStart = () => {
+        if (!hourRef.current || !minuteRef.current) return
+        const custom: CustomStart = {
+            hour: parseInt(hourRef.current.value),
+            minute: parseInt(minuteRef.current.value),
+            ampm
+        }
+        props.setCustomStart(custom)
+    }
+
+    // call update in useEffect for ampm changes to ensure state updated prior
+    useEffect(() => {
+        updateCustomStart()
+    }, [ampm])
+
+    if (!props.lastEntry) return <></>
     return (
         <span className={styles.wrap}>
             <p>Start time:</p>
             { props.lastEntry.clockIn
                 ? <p>{getTimeString(props.lastEntry.date)}</p>
                 : <div>
-                    <input type="text" defaultValue={getDateHours(props.lastEntry.date)} />
-                    <input type="text" defaultValue={getDateMinutes(props.lastEntry.date)} />
-                    <Toggle a="am" b="pm" />
+                    <input ref={hourRef} onInput={updateCustomStart} type="text" defaultValue={getDateHours(now)} />
+                    <input ref={minuteRef} onInput={updateCustomStart} type="text" defaultValue={getDateMinutes(now)} />
+                    <Toggle a="am" b="pm" value={ampm} setValue={v => setAmpm(v)} />
                 </div> }
         </span>
     )
@@ -26,15 +46,15 @@ const StartTime: FC<StartTimeProps> = props => {
 
 type ToggleProps = {
     a: string,
-    b: string
+    b: string,
+    value: string,
+    setValue: (v: string) => void
 }
 
 const Toggle: FC<ToggleProps> = props => {
-    const [selected, setSelected] = useState<string>(props.a)
-
     return (
-        <a onClick={() => setSelected(selected === props.a ? props.b : props.a)}>
-            {selected}
+        <a onClick={() => props.setValue(props.value === props.a ? props.b : props.a)}>
+            {props.value}
         </a>
     )
 }

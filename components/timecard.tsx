@@ -30,6 +30,7 @@ const Timecard: FC<TimecardProps> = props => {
             entries.pop()
         }
         setVisibleEntries(entries)
+        // deleteEntries(entries.map(entry => entry?.id))
     }
 
     const deleteEntries = async (ids: Array<string | undefined>) => {
@@ -53,6 +54,7 @@ const Timecard: FC<TimecardProps> = props => {
             if (!entry.clockIn) { pairs.push([entries[i + 1], entries[i]]) }
             return pairs
         }, entryPairs)
+        console.log(entryPairs)
         return entryPairs.map((pair, i) =>
             <DayDisplay in={pair[0]} out={pair[1]} delete={deleteEntries} key={i} />
         )
