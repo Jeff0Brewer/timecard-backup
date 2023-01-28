@@ -14,8 +14,18 @@ const isEntryData = (x: any) => {
     )
 }
 
+const newEntryData = () => {
+    const entry: EntryData = {
+        date: new Date(),
+        clockIn: true,
+        userEmail: ''
+    }
+    return entry
+}
+
 export {
-    isEntryData
+    isEntryData,
+    newEntryData
 }
 
 export type {

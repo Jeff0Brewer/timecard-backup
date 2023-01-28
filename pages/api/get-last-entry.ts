@@ -12,7 +12,10 @@ const getLastEntry = async (req: NextApiRequest, res: NextApiResponse<ClockInRes
         where: { userEmail: req.body.userEmail },
         orderBy: { date: 'desc' }
     })
-    res.status(200).send(entry)
+    if (entry) {
+        res.status(200).send(entry)
+    }
+    res.status(404).send({ message: 'No entries found' })
 }
 
 export default getLastEntry
