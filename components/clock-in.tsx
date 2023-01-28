@@ -1,15 +1,8 @@
 import React, { FC, useState, useEffect } from 'react'
-import { getTimeString, getDateString } from '@/lib/date-util'
 import type { EntryData } from '@/lib/types'
+import { getTimeString, getDateStringLong } from '@/lib/date-util'
+import { postBody } from '@/lib/fetch-util'
 import styles from '@/styles/ClockIn.module.css'
-
-const postBody = (data: object) => {
-    return {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-    }
-}
 
 type ClockInProps = {
     userEmail: string
@@ -55,7 +48,7 @@ const ClockIn: FC<ClockInProps> = props => {
 
     return (
         <section className={styles.wrap}>
-            <p className={styles.date}>{getDateString(displayTime)}</p>
+            <p className={styles.date}>{getDateStringLong(displayTime)}</p>
             <p className={styles.time}>{getTimeString(displayTime)}</p>
             <button className={styles.clockIn} onClick={clockIn}>Clock {clockInState ? 'Out' : 'In'}</button>
         </section>

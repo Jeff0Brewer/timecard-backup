@@ -1,8 +1,8 @@
 import React from 'react'
 import Head from 'next/head'
 import { useSession, signOut } from 'next-auth/react'
-import ClockIn from '@/components/clock-in'
 import SignIn from '@/components/sign-in'
+import Timecard from '@/components/timecard'
 import styles from '@/styles/Home.module.css'
 
 export default function Home () {
@@ -18,7 +18,7 @@ export default function Home () {
                 session?.user?.email
                     ? <div>
                         <button className={styles.signOut} onClick={() => signOut()}>log out</button>
-                        <ClockIn userEmail={session.user.email}/>
+                        <Timecard userEmail={session.user.email} />
                     </div>
                     : <SignIn />
             }</main>
