@@ -1,0 +1,29 @@
+.bounds {
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.boundInput {
+    display: flex;
+    align-items: center;
+}
+
+.boundUpdate {
+    font-size: inherit;
+    padding: 5px 10px;
+    margin: 5px;
+    border-radius: var(--border-rad);
+}
+
+.boundArrow {
+    font-size: 20px;
+    margin: 0 10px;
+    display: flex;
+    align-items: center;
+}
+
+.hidden {
+    display: none;
+}

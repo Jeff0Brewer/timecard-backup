@@ -28,9 +28,29 @@ const DateInput: FC<DateInputProps> = props => {
 
     return (
         <span className={styles.wrap}>
-            <input ref={monthRef} onInput={update} defaultValue={getDateMonth(props.value)} type="text" />
-            <input ref={dayRef} onInput={update} defaultValue={props.value.getDate()} type="text" />
-            <input ref={yearRef} onInput={update} defaultValue={props.value.getFullYear()} type="text" />
+            <input
+                className={styles.inputSmall}
+                ref={monthRef}
+                onInput={update}
+                defaultValue={getDateMonth(props.value)}
+                type="text"
+            />
+            /
+            <input
+                className={styles.inputSmall}
+                ref={dayRef}
+                onInput={update}
+                defaultValue={props.value.getDate()}
+                type="text"
+            />
+            /
+            <input
+                className={styles.inputLarge}
+                ref={yearRef}
+                onInput={update}
+                defaultValue={props.value.getFullYear()}
+                type="text"
+            />
         </span>
     )
 }

@@ -1,3 +1,32 @@
 .wrap {
     display: flex;
+    align-items: center;
+    font-size: 16px;
+    margin: 5px;
+    padding: 5px;
+}
+
+.startDisplay {
+    margin-left: 5px;
+}
+
+.startInput {
+    border: 1px solid #fff;
+    border-radius: var(--border-rad);
+    padding: 5px;
+    margin-left: 10px;
+}
+
+.hourInput {
+    text-align: right;
+}
+
+.wrap input {
+    width: 22px;
+    font-size: inherit;
+}
+
+.toggle {
+    cursor: pointer;
+    font-size: inherit;
 }

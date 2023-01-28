@@ -1,4 +1,5 @@
 import React, { FC, useState, useEffect } from 'react'
+import { HiArrowNarrowRight } from 'react-icons/hi'
 import type { EntryData } from '@/lib/types'
 import { getNextWeek, getPrevWeek } from '@/lib/date-util'
 import { postBody } from '@/lib/fetch-util'
@@ -67,10 +68,15 @@ const Timecard: FC<TimecardProps> = props => {
     return (
         <section>
             <ClockIn userEmail={props.userEmail} updateTimecard={getEntries} />
-            <span>
-                <DateInput value={minTime} setValue={setMinTime} />
-                <DateInput value={maxTime} setValue={setMaxTime} />
-                <button onClick={getEntries}>update</button>
+            <span
+                className={`${styles.bounds} ${visibleEntries.length > 1 ? '' : styles.hidden}`}
+            >
+                <div className={styles.boundInput}>
+                    <DateInput value={minTime} setValue={setMinTime} />
+                    <div className={styles.boundArrow}><HiArrowNarrowRight /></div>
+                    <DateInput value={maxTime} setValue={setMaxTime} />
+                </div>
+                <button className={styles.boundUpdate} onClick={getEntries}>update</button>
             </span>
             <div> { displayEntries() } </div>
         </section>

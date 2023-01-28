@@ -32,12 +32,24 @@ const StartTime: FC<StartTimeProps> = props => {
     if (!props.lastEntry) return <></>
     return (
         <span className={styles.wrap}>
-            <p>Start time:</p>
+            <p>{props.lastEntry.clockIn ? 'started at' : 'start time:'}</p>
             { props.lastEntry.clockIn
-                ? <p>{getTimeString(props.lastEntry.date)}</p>
-                : <div>
-                    <input ref={hourRef} onInput={updateCustomStart} type="text" defaultValue={getDateHours(now)} />
-                    <input ref={minuteRef} onInput={updateCustomStart} type="text" defaultValue={now.getMinutes()} />
+                ? <p className={styles.startDisplay}>{getTimeString(props.lastEntry.date)}</p>
+                : <div className={styles.startInput}>
+                    <input
+                        className={styles.hourInput}
+                        ref={hourRef}
+                        onInput={updateCustomStart}
+                        defaultValue={getDateHours(now)}
+                        type="text"
+                    />
+                    :
+                    <input
+                        ref={minuteRef}
+                        onInput={updateCustomStart}
+                        defaultValue={now.getMinutes()}
+                        type="text"
+                    />
                     <Toggle a="am" b="pm" value={ampm} setValue={v => setAmpm(v)} />
                 </div> }
         </span>
@@ -53,7 +65,7 @@ type ToggleProps = {
 
 const Toggle: FC<ToggleProps> = props => {
     return (
-        <a onClick={() => props.setValue(props.value === props.a ? props.b : props.a)}>
+        <a className={styles.toggle} onClick={() => props.setValue(props.value === props.a ? props.b : props.a)}>
             {props.value}
         </a>
     )
