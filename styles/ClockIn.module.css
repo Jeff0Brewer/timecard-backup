@@ -7,7 +7,7 @@
 
 .date, .time {
     margin: 5px;
-    font-size: 35px;
+    font-size: min(35px, 6vw);
     font-weight: 500;
 }
 
