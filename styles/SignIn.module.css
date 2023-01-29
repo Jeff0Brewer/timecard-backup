@@ -6,7 +6,7 @@
 
 .header {
     margin: 20px;
-    font-size: 40px;
+    font-size: min(40px, 9vw);
 }
 
 .signIn {
