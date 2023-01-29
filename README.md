@@ -13,7 +13,7 @@ keep a redundant record of your hours to verify your compensation.
 Hours are tracked by clocking in and out as you would with a normal timecard. Custom
 start times can be entered to clock in early and begin tracking as your work starts.
 
-<p style="display: flex; align-items: center; justify-content: space-around;">
+<p align="center">
   <img src="https://github.com/Jeff0Brewer/readme-img/blob/main/timecard-backup/clockin.jpg?raw=true" alt="clock in button"/>
   <img src="https://github.com/Jeff0Brewer/readme-img/blob/main/timecard-backup/clockout.jpg?raw=true" alt="clock out button"/>
 </p>
