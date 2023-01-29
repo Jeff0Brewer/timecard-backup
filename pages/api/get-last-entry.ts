@@ -7,6 +7,7 @@ type ClockInRes = EntryData | null | { message: string }
 const getLastEntry = async (req: NextApiRequest, res: NextApiResponse<ClockInRes>) => {
     if (req.method !== 'POST' || typeof req.body?.userEmail !== 'string') {
         res.status(405).send({ message: 'Must send user email in POST request' })
+        return
     }
     const entry = await prisma.timeEntry?.findFirst({
         where: { userEmail: req.body.userEmail },
@@ -14,6 +15,7 @@ const getLastEntry = async (req: NextApiRequest, res: NextApiResponse<ClockInRes
     })
     if (entry) {
         res.status(200).send(entry)
+        return
     }
     res.status(404).send({ message: 'No entries found' })
 }

@@ -8,6 +8,7 @@ type EntriesRes = Array<EntryData> | { message: string }
 const getEntries = async (req: NextApiRequest, res: NextApiResponse<EntriesRes>) => {
     if (req.method !== 'POST' || typeof req.body?.userEmail !== 'string') {
         res.status(405).send({ message: 'Must send user email in POST request' })
+        return
     }
     const query: Prisma.TimeEntryFindManyArgs = {
         where: { userEmail: req.body.userEmail },
