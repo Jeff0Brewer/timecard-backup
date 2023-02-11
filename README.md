@@ -1,10 +1,6 @@
 # Timecard Backup
 A web app to easily track your work hours. Deployed at [timecard-backup.app](https://www.timecard-backup.app/)
 
-Ever gotten a suspiciously low paycheck from an hourly employer? Timecard systems
-can be prone to errors or be edited erroneously by management. This app helps easily
-keep a redundant record of your hours to verify your compensation.
-
 <p align="center">
   <img src="https://github.com/Jeff0Brewer/readme-img/blob/main/timecard-backup/timecard-ex.jpg?raw=true" alt="layout example"/>
 </p>
