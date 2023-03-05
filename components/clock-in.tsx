@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react'
 import type { EntryData, CustomStart } from '@/lib/types'
 import { newEntryData } from '@/lib/types'
-import { getTimeString, getDateStringLong, dateFromCustomStart } from '@/lib/date-util'
+import { getDateStringLong, dateFromCustomStart } from '@/lib/date-util'
 import { postBody, getDateJson } from '@/lib/fetch-util'
 import StartTime from '@/components/start-time'
 import styles from '@/styles/ClockIn.module.css'
@@ -36,6 +36,11 @@ const ClockIn: FC<ClockInProps> = props => {
                 date = customDate
             }
         }
+        // prevent clocking out before clock in time
+        if (lastEntry.clockIn && date < lastEntry.date) {
+            date = new Date(lastEntry.date.getTime() + 1)
+        }
+
         const entry: EntryData = {
             date,
             clockIn: !lastEntry.clockIn,
@@ -56,7 +61,7 @@ const ClockIn: FC<ClockInProps> = props => {
 
     useEffect(() => {
         getLastEntry()
-        const intervalId = setInterval(() => setDisplayTime(new Date()), 1000)
+        const intervalId = window.setInterval(() => setDisplayTime(new Date()), 1000)
         return () => { window.clearInterval(intervalId) }
     }, [])
 

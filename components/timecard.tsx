@@ -32,7 +32,6 @@ const Timecard: FC<TimecardProps> = props => {
             entries.pop()
         }
         setVisibleEntries(entries)
-        // deleteEntries(entries.map(entry => entry?.id))
     }
 
     const deleteEntries = async (ids: Array<string | undefined>) => {
@@ -78,7 +77,7 @@ const Timecard: FC<TimecardProps> = props => {
     }, [])
 
     return (
-        <section>
+        <section className={styles.wrap}>
             <ClockIn userEmail={props.userEmail} updateTimecard={getEntries} />
             <span
                 className={styles.bounds}

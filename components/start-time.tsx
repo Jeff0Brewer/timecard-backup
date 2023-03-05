@@ -1,73 +1,79 @@
-import React, { FC, useState, useRef, useEffect } from 'react'
+import React, { FC, useRef, useEffect } from 'react'
 import type { EntryData, CustomStart } from '@/lib/types'
-import { getTimeString, getDateHours, getDateAmPm, getTwoDigitMinutes } from '@/lib/date-util'
-import styles from '@/styles/StartTime.module.css'
+import { getTimeString, getTwoDigitMinutes } from '@/lib/date-util'
+import styles from '@/styles/ClockIn.module.css'
 
 type StartTimeProps = {
-    lastEntry: EntryData | null,
+    lastEntry: EntryData,
     setCustomStart: (custom: CustomStart) => void
 }
 
 const StartTime: FC<StartTimeProps> = props => {
-    const now = new Date()
-    const hourRef = useRef<HTMLInputElement>(null)
-    const minuteRef = useRef<HTMLInputElement>(null)
-    const [ampm, setAmpm] = useState<string>(getDateAmPm(now))
-
-    const updateCustomStart = () => {
-        if (!hourRef.current || !minuteRef.current) return
-        const custom: CustomStart = {
-            hour: parseInt(hourRef.current.value),
-            minute: parseInt(minuteRef.current.value),
-            ampm
-        }
-        props.setCustomStart(custom)
-    }
-
-    // call update in useEffect for ampm changes to ensure state updated prior
-    useEffect(() => {
-        updateCustomStart()
-    }, [ampm])
-
-    if (!props.lastEntry) return <></>
     return (
-        <span className={styles.wrap}>
-            <p>{props.lastEntry.clockIn ? 'started at' : 'start time:'}</p>
+        <span className={styles.startTime}>
             { props.lastEntry.clockIn
-                ? <p className={styles.startDisplay}>{getTimeString(props.lastEntry.date)}</p>
-                : <div className={styles.startInput}>
-                    <input
-                        className={styles.hourInput}
-                        ref={hourRef}
-                        onInput={updateCustomStart}
-                        defaultValue={getDateHours(now)}
-                        type="text"
-                    />
-                    :
-                    <input
-                        ref={minuteRef}
-                        onInput={updateCustomStart}
-                        defaultValue={getTwoDigitMinutes(now.getMinutes())}
-                        type="text"
-                    />
-                    <Toggle a="am" b="pm" value={ampm} setValue={v => setAmpm(v)} />
-                </div> }
+                ? <p>started - {getTimeString(props.lastEntry.date)}</p>
+                : <StartInput setCustomStart={props.setCustomStart} />
+            }
         </span>
     )
 }
 
-type ToggleProps = {
-    a: string,
-    b: string,
-    value: string,
-    setValue: (v: string) => void
+type StartInputProps = {
+    setCustomStart: (custom: CustomStart) => void
 }
 
-const Toggle: FC<ToggleProps> = props => {
+const StartInput: FC<StartInputProps> = props => {
+    const inputRef = useRef<HTMLInputElement>(null)
+    const lastValidRef = useRef<string>(getTimeString(new Date()))
+    const revertTimerRef = useRef<number>(-1)
+
+    const updateCustomStart = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const str = e.target.value
+        const split = str.split(':')
+        const hour = parseInt(split[0])
+        const minute = parseInt(split[1]) // trailing non-numeric chars ignored
+        const ampmMatch = str.match(/([ap]m)/)
+        if (
+            hour >= 0 && hour <= 12 &&
+            minute >= 0 && minute <= 60 &&
+            ampmMatch
+        ) {
+            const ampm = ampmMatch[0]
+            const custom: CustomStart = { hour, minute, ampm }
+            lastValidRef.current = `${hour}:${getTwoDigitMinutes(minute)} ${ampm}`
+            props.setCustomStart(custom)
+        }
+        // revert start time to last valid entry after delay
+        window.clearTimeout(revertTimerRef.current)
+        revertTimerRef.current = window.setTimeout(revertInvalid, 3000)
+    }
+
+    const revertInvalid = () => {
+        if (inputRef.current) {
+            inputRef.current.value = lastValidRef.current
+        }
+    }
+
+    useEffect(() => {
+        return () => {
+            if (revertTimerRef.current) {
+                window.clearTimeout(revertTimerRef.current)
+            }
+        }
+    }, [])
+
     return (
-        <a className={styles.toggle} onClick={() => props.setValue(props.value === props.a ? props.b : props.a)}>
-            {props.value}
-        </a>
+        <>
+            <p>start time:</p>
+            <input
+                type="text"
+                ref={inputRef}
+                className={styles.startInput}
+                onInput={updateCustomStart}
+                defaultValue={lastValidRef.current}
+            />
+        </>
     )
 }
 
