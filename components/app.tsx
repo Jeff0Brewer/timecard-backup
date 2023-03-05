@@ -6,13 +6,13 @@ import { postBody } from '@/lib/fetch-util'
 import ClockIn from '@/components/clock-in'
 import DayDisplay from '@/components/day-display'
 import DateInput from '@/components/date-input'
-import styles from '@/styles/Timecard.module.css'
+import styles from '@/styles/App.module.css'
 
-type TimecardProps = {
+type AppProps = {
     userEmail: string
 }
 
-const Timecard: FC<TimecardProps> = props => {
+const App: FC<AppProps> = props => {
     const [visibleEntries, setVisibleEntries] = useState<Array<EntryData>>([])
     const [maxTime, setMaxTime] = useState<Date>(getNextWeek(new Date()))
     const [minTime, setMinTime] = useState<Date>(getPrevWeek(new Date()))
@@ -79,9 +79,7 @@ const Timecard: FC<TimecardProps> = props => {
     return (
         <section className={styles.wrap}>
             <ClockIn userEmail={props.userEmail} updateTimecard={getEntries} />
-            <span
-                className={styles.bounds}
-            >
+            <span className={styles.bounds}>
                 <div className={styles.boundInput}>
                     <DateInput value={minTime} setValue={setMinTime} />
                     <div className={styles.boundArrow}><HiArrowNarrowRight /></div>
@@ -94,4 +92,4 @@ const Timecard: FC<TimecardProps> = props => {
     )
 }
 
-export default Timecard
+export default App
