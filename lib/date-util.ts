@@ -1,13 +1,13 @@
 import type { CustomStart } from '@/lib/types'
 
 const WEEKDAYS = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday'
+    'Sun',
+    'Mon',
+    'Tue',
+    'Wed',
+    'Thu',
+    'Fri',
+    'Sat'
 ]
 
 const MONTHS = [
@@ -29,8 +29,8 @@ const getDateStringLong = (date: Date) => {
     const weekday = WEEKDAYS[date.getDay()]
     const month = MONTHS[date.getMonth()]
     const day = date.getDate()
-    const year = date.getFullYear()
-    return `${weekday} ${month} ${day}, ${year}`
+    const time = getTimeString(date)
+    return `${weekday}. ${month} ${day}, ${time}`
 }
 
 const getDateString = (date: Date) => {
