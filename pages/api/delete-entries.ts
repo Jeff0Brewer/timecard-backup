@@ -2,17 +2,16 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import prisma from '@/prisma/client'
 
 const deleteEntries = async (req: NextApiRequest, res: NextApiResponse) => {
-    // if (req.method !== 'POST' || !Array.isArray(req.body?.ids || typeof req.body.ids !== 'string')) {
-    //    res.status(405).send({ message: 'Must send entry id array in POST request' })
-    //    return
-    // }
+    if (req.method !== 'POST' || !Array.isArray(req.body?.ids || typeof req.body.ids !== 'string')) {
+        res.status(405).send({ message: 'Must send entry id array in POST request' })
+        return
+    }
     const deleted = await prisma.timeEntry?.deleteMany({
-        where: { userEmail: 'jeff00brewer@gmail.com' }
-        // where: {
-        //    id: {
-        //        in: req.body.ids
-        //    }
-        // }
+        where: {
+            id: {
+                in: req.body.ids
+            }
+        }
     })
 
     if (deleted) {
