@@ -1,7 +1,7 @@
 import React, { FC, useRef, useEffect } from 'react'
 import type { EntryData, CustomStart } from '@/lib/types'
 import { getTimeString, getTwoDigitMinutes } from '@/lib/date-util'
-import styles from '@/styles/ClockIn.module.css'
+import styles from '@/styles/Clock.module.css'
 
 type StartTimeProps = {
     lastEntry: EntryData,
@@ -10,12 +10,11 @@ type StartTimeProps = {
 
 const StartTime: FC<StartTimeProps> = props => {
     return (
-        <span className={styles.startTime}>
-            { props.lastEntry.clockIn
+        <span className={styles.startTime}>{
+            props.lastEntry.clockIn
                 ? <p>started - {getTimeString(props.lastEntry.date)}</p>
                 : <StartInput setCustomStart={props.setCustomStart} />
-            }
-        </span>
+        }</span>
     )
 }
 

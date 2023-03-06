@@ -4,7 +4,7 @@ import { newEntryData } from '@/lib/types'
 import { getDateStringLong, dateFromCustomStart } from '@/lib/date-util'
 import { postBody, getDateJson } from '@/lib/fetch-util'
 import StartTime from '@/components/start-time'
-import styles from '@/styles/ClockIn.module.css'
+import styles from '@/styles/Clock.module.css'
 
 type ClockInProps = {
     userEmail: string,

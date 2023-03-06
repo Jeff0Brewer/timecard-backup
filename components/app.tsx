@@ -1,9 +1,9 @@
 import React, { FC, useState, useEffect } from 'react'
 import type { EntryData } from '@/lib/types'
+import Clock from '@/components/clock'
+import TableView from '@/components/table-view'
 import { getNextWeek, getPrevWeek } from '@/lib/date-util'
 import { postBody } from '@/lib/fetch-util'
-import ClockIn from '@/components/clock-in'
-import TableView from '@/components/table-view'
 import styles from '@/styles/App.module.css'
 
 type AppProps = {
@@ -38,7 +38,7 @@ const App: FC<AppProps> = props => {
 
     return (
         <section className={styles.wrap}>
-            <ClockIn userEmail={props.userEmail} updateTimecard={getEntries} />
+            <Clock userEmail={props.userEmail} updateTimecard={getEntries} />
             <TableView entries={visibleEntries} />
         </section>
     )
