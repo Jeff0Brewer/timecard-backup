@@ -1,11 +1,9 @@
 import React, { FC, useState, useEffect } from 'react'
-import { HiArrowNarrowRight } from 'react-icons/hi'
 import type { EntryData } from '@/lib/types'
-import { getNextWeek, getPrevWeek, hourFromMs, getTwoDigitMinutes } from '@/lib/date-util'
+import { getNextWeek, getPrevWeek } from '@/lib/date-util'
 import { postBody } from '@/lib/fetch-util'
 import ClockIn from '@/components/clock-in'
-import DayDisplay from '@/components/day-display'
-import DateInput from '@/components/date-input'
+import TableView from '@/components/table-view'
 import styles from '@/styles/App.module.css'
 
 type AppProps = {
@@ -34,44 +32,6 @@ const App: FC<AppProps> = props => {
         setVisibleEntries(entries)
     }
 
-    const deleteEntries = async (ids: Array<string | undefined>) => {
-        ids = ids.filter(id => id)
-        // remove entries on client for responsiveness
-        setVisibleEntries(
-            visibleEntries.filter(entry => (entry?.id && !ids.includes(entry.id)))
-        )
-        const res = await fetch('/api/delete-entries', postBody({ ids }))
-        if (res.status !== 200) {
-            getEntries() // revert client side deletion if db operation failed
-            const { message } = await res.json()
-            console.log(message)
-        }
-    }
-
-    const displayEntries = () => {
-        // group entries into clock in/out pairs
-        const entryPairs: Array<Array<EntryData>> = []
-        visibleEntries.reduce((pairs, entry, i, entries) => {
-            if (!entry.clockIn) { pairs.push([entries[i + 1], entries[i]]) }
-            return pairs
-        }, entryPairs)
-        let hoursWorked = 0
-        entryPairs.forEach(pair => {
-            hoursWorked += hourFromMs(pair[1].date.getTime() - pair[0].date.getTime())
-        })
-        const minutesWorked = Math.floor((hoursWorked % 1) * 60)
-        hoursWorked = Math.floor(hoursWorked)
-        const dayDisplays = entryPairs.map((pair, i) =>
-            <DayDisplay in={pair[0]} out={pair[1]} delete={deleteEntries} key={i} />
-        )
-        return (
-            <div>
-                {dayDisplays}
-                {<p className={styles.totalHours}>{`hours worked: ${hoursWorked}:${getTwoDigitMinutes(minutesWorked)}`}</p>}
-            </div>
-        )
-    }
-
     useEffect(() => {
         getEntries()
     }, [])
@@ -79,15 +39,7 @@ const App: FC<AppProps> = props => {
     return (
         <section className={styles.wrap}>
             <ClockIn userEmail={props.userEmail} updateTimecard={getEntries} />
-            <span className={styles.bounds}>
-                <div className={styles.boundInput}>
-                    <DateInput value={minTime} setValue={setMinTime} />
-                    <div className={styles.boundArrow}><HiArrowNarrowRight /></div>
-                    <DateInput value={maxTime} setValue={setMaxTime} />
-                </div>
-                <button className={styles.boundUpdate} onClick={getEntries}>update</button>
-            </span>
-            { displayEntries() }
+            <TableView entries={visibleEntries} />
         </section>
     )
 }
