@@ -63,7 +63,7 @@ const getHourString = (hours: number) => {
 
 const getPrevWeek = (date: Date) => {
     date.setHours(0)
-    date.setDate(date.getDate() - 7)
+    date.setDate(date.getDate() - 6)
     return date
 }
 
