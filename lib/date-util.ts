@@ -33,6 +33,12 @@ const getDateStringLong = (date: Date) => {
     return `${weekday}. ${month} ${day}, ${time}`
 }
 
+const getDateStringShort = (date: Date) => {
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    return `${month}/${day}`
+}
+
 const getDateString = (date: Date) => {
     const weekday = WEEKDAYS[date.getDay()]
     const month = date.getMonth() + 1
@@ -55,6 +61,11 @@ const getPrevWeek = (date: Date) => {
 
 const getNextWeek = (date: Date) => {
     date.setDate(date.getDate() + 7)
+    return date
+}
+
+const getDayEnd = (date: Date) => {
+    date.setUTCHours(23, 59, 59, 999)
     return date
 }
 
@@ -89,9 +100,11 @@ const getTwoDigitMinutes = (min: number) => {
 export {
     getTimeString,
     getDateStringLong,
+    getDateStringShort,
     getDateString,
     getPrevWeek,
     getNextWeek,
+    getDayEnd,
     getDateMonth,
     getDateHours,
     getDateAmPm,

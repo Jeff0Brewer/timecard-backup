@@ -1,3 +1,8 @@
+.wrap {
+    width: min(100vw, 700px);
+    padding: 10px;
+}
+
 .bounds {
     font-size: 14px;
     display: flex;

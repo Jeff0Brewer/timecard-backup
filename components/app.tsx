@@ -1,8 +1,9 @@
 import React, { FC, useState, useEffect } from 'react'
 import type { EntryData } from '@/lib/types'
 import Clock from '@/components/clock'
+import ChartView from '@/components/chart-view'
 import TableView from '@/components/table-view'
-import { getNextWeek, getPrevWeek } from '@/lib/date-util'
+import { getDayEnd, getPrevWeek } from '@/lib/date-util'
 import { postBody } from '@/lib/fetch-util'
 import styles from '@/styles/App.module.css'
 
@@ -12,7 +13,7 @@ type AppProps = {
 
 const App: FC<AppProps> = props => {
     const [visibleEntries, setVisibleEntries] = useState<Array<EntryData>>([])
-    const [maxTime, setMaxTime] = useState<Date>(getNextWeek(new Date()))
+    const [maxTime, setMaxTime] = useState<Date>(getDayEnd(new Date()))
     const [minTime, setMinTime] = useState<Date>(getPrevWeek(new Date()))
 
     const getEntries = async () => {
@@ -39,7 +40,7 @@ const App: FC<AppProps> = props => {
     return (
         <section className={styles.wrap}>
             <Clock userEmail={props.userEmail} updateTimecard={getEntries} />
-            <TableView entries={visibleEntries} />
+            <ChartView entries={visibleEntries} minTime={minTime} maxTime={maxTime} />
         </section>
     )
 }
