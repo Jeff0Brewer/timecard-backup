@@ -40,11 +40,12 @@ const getDateStringShort = (date: Date) => {
 }
 
 const getDateString = (date: Date) => {
-    const weekday = WEEKDAYS[date.getDay()]
     const month = date.getMonth() + 1
     const day = date.getDate()
     const year = date.getFullYear() % 100
-    return `${weekday} ${month}/${day}/${year}`
+    const monthStr = month < 10 ? '0' + month : month
+    const dayStr = day < 10 ? '0' + day : day
+    return `${monthStr}.${dayStr}.${year}`
 }
 
 const getTimeString = (date: Date) => {
@@ -54,7 +55,14 @@ const getTimeString = (date: Date) => {
     }).toLowerCase()
 }
 
+const getHourString = (hours: number) => {
+    const minute = Math.floor(60 * (hours % 1))
+    const hour = Math.floor(hours)
+    return `${hour}:${getTwoDigitMinutes(minute)}`
+}
+
 const getPrevWeek = (date: Date) => {
+    date.setHours(0)
     date.setDate(date.getDate() - 7)
     return date
 }
@@ -102,6 +110,7 @@ export {
     getDateStringLong,
     getDateStringShort,
     getDateString,
+    getHourString,
     getPrevWeek,
     getNextWeek,
     getDayEnd,

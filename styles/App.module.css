@@ -3,37 +3,8 @@
     padding: 10px;
 }
 
-.bounds {
-    font-size: 14px;
+.infoBar {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
     justify-content: space-between;
-}
-
-.boundInput {
-    display: flex;
-    flex-shrink: 0;
-    align-items: center;
-}
-
-.boundUpdate {
-    font-size: inherit;
-    padding: 5px 10px;
-    margin: 5px;
-    border-radius: var(--border-rad);
-}
-
-.boundArrow {
-    font-size: 20px;
-    margin: 0 min(10px, 1vw);
-    display: flex;
-    align-items: center;
-}
-
-.totalHours {
-    border: solid #fff;
-    border-width: 1px 0 0 0;
-    padding: 20px;
-    text-align: center;
+    padding: 10px;
 }
