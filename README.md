@@ -14,7 +14,7 @@ start times can be entered to clock in early and begin tracking as your work sta
   <img src="https://github.com/Jeff0Brewer/readme-img/blob/main/timecard-backup/clockout.jpg?raw=true" alt="clock out button"/>
 </p>
 
-Select custom timeframes to display timecard entries and automatically sum total hours worked.
+Select custom timeframes to display timecard entries and automatically sum hours worked.
 
 <p align="center">
   <img src="https://github.com/Jeff0Brewer/readme-img/blob/main/timecard-backup/list-ex.jpg?raw=true" alt="list example"/>
