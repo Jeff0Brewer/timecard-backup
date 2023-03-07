@@ -98,6 +98,10 @@ const dateFromCustomStart = (custom: CustomStart) => {
     return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, custom.minute)
 }
 
+const getTwoDigitMinutes = (minutes: number) => {
+    return minutes < 10 ? '0' + minutes : minutes
+}
+
 export {
     getHourString,
     getTimeString,
@@ -109,6 +113,7 @@ export {
     getDayStart,
     getDayEnd,
     dateFromCustomStart,
+    getTwoDigitMinutes,
     MS_TO_HR,
     MS_PER_DAY
 }
