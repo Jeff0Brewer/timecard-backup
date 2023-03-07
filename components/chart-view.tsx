@@ -70,6 +70,9 @@ const options: ChartOptions<'line'> = {
             },
             grid: {
                 color: '#333'
+            },
+            border: {
+                display: false
             }
         },
         x: {
