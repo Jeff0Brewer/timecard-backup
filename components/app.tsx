@@ -4,6 +4,7 @@ import Clock from '@/components/clock'
 import DateBounds from '@/components/date-bounds'
 import HourView from '@/components/hour-view'
 import ChartView from '@/components/chart-view'
+import TableView from '@/components/table-view'
 import { getDayEnd, getPrevWeek } from '@/lib/date-util'
 import { postBody } from '@/lib/fetch-util'
 import styles from '@/styles/App.module.css'
@@ -38,6 +39,14 @@ const App: FC<AppProps> = props => {
         setVisibleEntries(entries)
     }
 
+    const deleteEntries = async (ids: Array<string>) => {
+        const res = await fetch('/api/delete-entries', postBody({ ids }))
+        if (res.status !== 200) {
+            const { message } = await res.json()
+            console.log(message)
+        }
+    }
+
     useEffect(() => {
         getEntries()
     }, [minTime, maxTime])
@@ -52,6 +61,7 @@ const App: FC<AppProps> = props => {
             <ChartView entries={visibleEntries} minTime={minTime} maxTime={maxTime} />
         </section>
     )
+    // <TableView entries={visibleEntries} />
 }
 
 export default App
