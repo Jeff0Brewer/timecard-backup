@@ -29,12 +29,12 @@ const App: FC<AppProps> = props => {
             return entry
         })
         // ensure oldest entry is clock-in instance
-        if (entries.length && !entries[entries.length - 1].clockIn) {
-            entries.pop()
+        if (entries.length && !entries[0].clockIn) {
+            entries.shift()
         }
         // ensure entries always have pair
         if (entries.length % 2 !== 0) {
-            entries.shift()
+            entries.pop()
         }
         setVisibleEntries(entries)
     }
@@ -59,9 +59,9 @@ const App: FC<AppProps> = props => {
                 <HourView entries={visibleEntries} />
             </span>
             <ChartView entries={visibleEntries} minTime={minTime} maxTime={maxTime} />
+            <TableView entries={visibleEntries} deleteEntries={deleteEntries} />
         </section>
     )
-    // <TableView entries={visibleEntries} />
 }
 
 export default App

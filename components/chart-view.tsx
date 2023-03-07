@@ -3,7 +3,7 @@ import type { ChartData, ChartOptions } from 'chart.js'
 import { Chart, CategoryScale, LinearScale, LineElement, PointElement } from 'chart.js'
 import { Line } from 'react-chartjs-2'
 import type { EntryData } from '@/lib/types'
-import { getDateStringShort } from '@/lib/date-util'
+import { getDateString, MS_TO_HR, MS_PER_DAY } from '@/lib/date-util'
 import styles from '@/styles/ChartView.module.css'
 
 type ChartViewProps = {
@@ -22,16 +22,16 @@ const ChartView: FC<ChartViewProps> = props => {
         const minMs = props.minTime.getTime()
         const maxMs = props.maxTime.getTime()
         for (let t = minMs; t <= maxMs; t += MS_PER_DAY) {
-            const date = getDateStringShort(new Date(t))
+            const date = getDateString(new Date(t))
             data[date] = 0
         }
         // add total hours for each entry pair to data dict
-        for (let i = props.entries.length - 1; i >= 0; i -= 2) {
+        for (let i = 0; i < props.entries.length; i += 2) {
             // use date of clock in as key
-            const date = getDateStringShort(props.entries[i].date)
+            const date = getDateString(props.entries[i].date)
             const t0 = props.entries[i].date.getTime()
-            const t1 = props.entries[i - 1].date.getTime()
-            const hours = (t1 - t0) / MS_PER_HR
+            const t1 = props.entries[i + 1].date.getTime()
+            const hours = (t1 - t0) * MS_TO_HR
             data[date] += hours
         }
         setData({
@@ -80,8 +80,5 @@ const options: ChartOptions<'line'> = {
         }
     }
 }
-
-const MS_PER_HR = 3600000
-const MS_PER_DAY = 86400000
 
 export default ChartView
