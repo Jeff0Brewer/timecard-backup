@@ -71,19 +71,9 @@ const getTimeStringShort = (date: Date) => {
 
 const getHourString = (hours: number) => {
     const minute = Math.floor(60 * (hours % 1))
+    const minStr = minute < 10 ? '0' + minute : minute
     const hour = Math.floor(hours)
-    return `${hour}:${getTwoDigitMinutes(minute)}`
-}
-
-const getPrevWeek = (date: Date) => {
-    date.setHours(0)
-    date.setDate(date.getDate() - 6)
-    return date
-}
-
-const getNextWeek = (date: Date) => {
-    date.setDate(date.getDate() + 7)
-    return date
+    return `${hour}:${minStr}`
 }
 
 const getDayStart = (date: Date) => {
@@ -96,28 +86,16 @@ const getDayEnd = (date: Date) => {
     return date
 }
 
-const getDateMonth = (date: Date) => {
-    return date.getMonth() + 1
-}
-
-const getDateHours = (date: Date) => {
-    const hours = date.getHours() % 12
-    return hours || 12 // if hours is 0 replace with 12
-}
-
-const getDateAmPm = (date: Date) => {
-    return date.getHours() <= 11 ? 'am' : 'pm'
+const getPrevWeek = (date: Date) => {
+    date.setHours(0)
+    date.setDate(date.getDate() - 6)
+    return date
 }
 
 const dateFromCustomStart = (custom: CustomStart) => {
     const hours = (custom.hour % 12) + (custom.ampm === 'pm' ? 12 : 0)
     const now = new Date()
     return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, custom.minute)
-}
-
-const getTwoDigitMinutes = (min: number) => {
-    if (min < 10) return '0' + min
-    return min.toString()
 }
 
 export {
@@ -128,14 +106,9 @@ export {
     getDateStringMed,
     getDateStringLong,
     getPrevWeek,
-    getNextWeek,
     getDayStart,
     getDayEnd,
-    getDateMonth,
-    getDateHours,
-    getDateAmPm,
     dateFromCustomStart,
-    getTwoDigitMinutes,
     MS_TO_HR,
     MS_PER_DAY
 }
