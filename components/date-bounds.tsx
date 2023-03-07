@@ -1,6 +1,6 @@
 import React, { FC, useRef, useEffect } from 'react'
 import { FaCaretRight } from 'react-icons/fa'
-import { getDateString } from '@/lib/date-util'
+import { getDateString, getDayStart, getDayEnd } from '@/lib/date-util'
 import styles from '@/styles/DateBounds.module.css'
 
 type DateBoundsProps = {
@@ -11,11 +11,19 @@ type DateBoundsProps = {
 }
 
 const DateBounds: FC<DateBoundsProps> = props => {
+    const setMin = (date: Date) => {
+        props.setMin(getDayStart(date))
+    }
+
+    const setMax = (date: Date) => {
+        props.setMax(getDayEnd(date))
+    }
+
     return (
         <div className={styles.wrap}>
-            <DateInput default={props.min} setValue={props.setMin} />
+            <DateInput default={props.min} setValue={setMin} />
             <FaCaretRight className={styles.arrow} />
-            <DateInput default={props.max} setValue={props.setMax} />
+            <DateInput default={props.max} setValue={setMax} />
         </div>
     )
 }

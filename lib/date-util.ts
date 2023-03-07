@@ -86,6 +86,11 @@ const getNextWeek = (date: Date) => {
     return date
 }
 
+const getDayStart = (date: Date) => {
+    date.setHours(0)
+    return date
+}
+
 const getDayEnd = (date: Date) => {
     date.setHours(23, 59, 59, 999)
     return date
@@ -124,6 +129,7 @@ export {
     getDateStringLong,
     getPrevWeek,
     getNextWeek,
+    getDayStart,
     getDayEnd,
     getDateMonth,
     getDateHours,
