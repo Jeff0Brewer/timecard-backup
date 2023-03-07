@@ -31,6 +31,10 @@ const App: FC<AppProps> = props => {
         if (entries.length && !entries[entries.length - 1].clockIn) {
             entries.pop()
         }
+        // ensure entries always have pair
+        if (entries.length % 2 !== 0) {
+            entries.shift()
+        }
         setVisibleEntries(entries)
     }
 
