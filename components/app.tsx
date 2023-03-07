@@ -56,7 +56,7 @@ const App: FC<AppProps> = props => {
     }, [minTime, maxTime])
 
     return (
-        <main className={styles.wrap}>
+        <div className={styles.wrap}>
             <Clock userEmail={props.userEmail} updateTimecard={getEntries} />
             <span className={styles.infoBar}>
                 <DateBounds min={minTime} setMin={setMinTime} max={maxTime} setMax={setMaxTime} />
@@ -64,7 +64,7 @@ const App: FC<AppProps> = props => {
             </span>
             <ChartView entries={visibleEntries} minTime={minTime} maxTime={maxTime} />
             <TableView entries={visibleEntries} deleteEntries={deleteEntries} />
-        </main>
+        </div>
     )
 }
 

@@ -3,6 +3,7 @@
 :root {
     --border-rad: 4px;
     --hover-opacity: .7;
+    --accent-color: #ffcb68;
 }
 
 * {
@@ -30,6 +31,6 @@ input {
 }
 
 button {
-    border: 1px solid #fff;
+    border: none;
     background-color: transparent;
 }

@@ -2,7 +2,7 @@
     position: relative;
     width: 100%;
     padding: 20px;
-    margin-bottom: 50px;
+    margin: 30px 0;
     border-radius: var(--border-rad);
     background-color: #111;
 }
@@ -51,7 +51,6 @@
     display: grid;
     place-items: center;
     overflow: hidden;
-    border: none;
     width: 0;
     font-size: 20px;
     transition: width .3s ease;
@@ -62,7 +61,7 @@
 }
 
 .delete * {
-    color: #ffcb68;
+    color: var(--accent-color);
     transition: color .5s ease;
 }
 
