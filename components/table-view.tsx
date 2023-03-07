@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react'
-import { RiDeleteBack2Fill, RiDeleteBack2Line } from 'react-icons/ri'
+import { RiDeleteBackFill } from 'react-icons/ri'
 import type { EntryData } from '@/lib/types'
-import { hourFromMs, getTwoDigitMinutes, getDateString, getTimeString } from '@/lib/date-util'
+import { getDateStringMed, getTimeStringShort, getHourString, MS_TO_HR } from '@/lib/date-util'
 import styles from '@/styles/TableView.module.css'
 
 type TableViewProps = {
@@ -10,36 +10,46 @@ type TableViewProps = {
 }
 
 const TableView: FC<TableViewProps> = props => {
-    const displayEntries = () => {
-        // group entries into clock in/out pairs
-        const entryPairs: Array<Array<EntryData>> = []
-        props.entries.reduce((pairs, entry, i, entries) => {
-            if (!entry.clockIn) { pairs.push([entries[i + 1], entries[i]]) }
-            return pairs
-        }, entryPairs)
-        const dayDisplays = entryPairs.map((pair, i) =>
-            <DayDisplay in={pair[0]} out={pair[1]} delete={props.deleteEntries} key={i} />
-        )
-        return (
-            <div>
-                {dayDisplays}
-            </div>
-        )
+    const getDayRows = () => {
+        const days = []
+        for (let i = 0; i < props.entries.length; i += 2) {
+            days.push(
+                <DayRow
+                    in={props.entries[i]}
+                    out={props.entries[i + 1]}
+                    delete={props.deleteEntries}
+                    key={i}
+                />
+            )
+        }
+        return days.reverse()
     }
 
     return (
-        <>{ displayEntries() }</>
+        <section className={styles.wrap}>{
+            getDayRows()
+        }</section>
     )
 }
 
-type DayDisplayProps = {
+type DayRowProps = {
     in: EntryData,
     out: EntryData,
     delete: (ids: Array<string>) => void
 }
 
-const DayDisplay: FC<DayDisplayProps> = props => {
+const DayRow: FC<DayRowProps> = props => {
     const [deleteVisible, setDeleteVisible] = useState<boolean>(false)
+    const hourDiff = getHourString(
+        (props.out.date.getTime() - props.in.date.getTime()) * MS_TO_HR
+    )
+
+    const deleteSelf = () => {
+        const ids = []
+        if (props.in?.id) ids.push(props.in.id)
+        if (props.out?.id) ids.push(props.out.id)
+        props.delete(ids)
+    }
 
     return (
         <span
@@ -48,17 +58,20 @@ const DayDisplay: FC<DayDisplayProps> = props => {
             onMouseEnter={() => setDeleteVisible(true)}
             onMouseLeave={() => setDeleteVisible(false)}
         >
-            <p className={styles.day}>{getDateString(props.in.date)}</p>
-            <p className={styles.in}>{getTimeString(props.in.date)}</p>
-            <p className={styles.out}>{getTimeString(props.out.date)}</p>
-            <button
-                className={`${styles.delete} ${deleteVisible ? styles.deleteVisible : ''}`}
-            >
-                <RiDeleteBack2Line />
-                <div className={styles.deleteHover}>
-                    <RiDeleteBack2Fill />
-                </div>
-            </button>
+            <div>
+                <p className={styles.day}>{getDateStringMed(props.in.date)}</p>
+                <p className={styles.in}>{getTimeStringShort(props.in.date)}</p>
+                <p className={styles.out}>{getTimeStringShort(props.out.date)}</p>
+            </div>
+            <div>
+                <p className={styles.total}>{hourDiff}</p>
+                <button
+                    className={`${styles.delete} ${deleteVisible ? styles.deleteVisible : ''}`}
+                    onMouseDown={deleteSelf}
+                >
+                    <RiDeleteBackFill />
+                </button>
+            </div>
         </span>
     )
 }

@@ -14,8 +14,10 @@ const deleteEntries = async (req: NextApiRequest, res: NextApiResponse) => {
         }
     })
 
-    if (deleted) {
-        res.status(200).send({ message: `${deleted.count} entries deleted` })
+    if (deleted.count === req.body.ids.length) {
+        res.status(200).send(req.body.ids)
+    } else if (deleted) {
+        res.status(500).send({ message: `partial deletion, ${deleted.count} entries deleted` })
     } else {
         res.status(500).send({ message: 'no entries deleted' })
     }

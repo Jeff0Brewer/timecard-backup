@@ -32,10 +32,4 @@ input {
 button {
     border: 1px solid #fff;
     background-color: transparent;
-    transition: background-color .3s ease, color .3s ease;
-}
-
-button:hover {
-    background-color: #fff;
-    color: #000;
 }

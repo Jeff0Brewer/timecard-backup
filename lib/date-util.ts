@@ -25,6 +25,11 @@ const MONTHS = [
     'December'
 ]
 
+const MS_TO_HR = 1 / 3600000
+const MS_PER_DAY = 86400000
+
+const currYear = (new Date()).getFullYear() % 100
+
 const getDateStringLong = (date: Date) => {
     const weekday = WEEKDAYS[date.getDay()]
     const month = MONTHS[date.getMonth()]
@@ -33,10 +38,15 @@ const getDateStringLong = (date: Date) => {
     return `${weekday}. ${month} ${day}, ${time}`
 }
 
-const getDateStringShort = (date: Date) => {
+const getDateStringMed = (date: Date) => {
+    const weekday = WEEKDAYS[date.getDay()]
     const month = date.getMonth() + 1
     const day = date.getDate()
-    return `${month}/${day}`
+    const year = date.getFullYear() % 100
+    let str = `${weekday} ${month}.${day}`
+    // only show year if not current year
+    if (year !== currYear) { str += `.${year}` }
+    return str
 }
 
 const getDateString = (date: Date) => {
@@ -53,6 +63,10 @@ const getTimeString = (date: Date) => {
         hour: 'numeric',
         minute: 'numeric'
     }).toLowerCase()
+}
+
+const getTimeStringShort = (date: Date) => {
+    return getTimeString(date).replace(/[ m]/g, '')
 }
 
 const getHourString = (hours: number) => {
@@ -96,21 +110,18 @@ const dateFromCustomStart = (custom: CustomStart) => {
     return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, custom.minute)
 }
 
-const hourFromMs = (ms: number) => {
-    return ms / (1000 * 60 * 60)
-}
-
 const getTwoDigitMinutes = (min: number) => {
     if (min < 10) return '0' + min
     return min.toString()
 }
 
 export {
-    getTimeString,
-    getDateStringLong,
-    getDateStringShort,
-    getDateString,
     getHourString,
+    getTimeString,
+    getTimeStringShort,
+    getDateString,
+    getDateStringMed,
+    getDateStringLong,
     getPrevWeek,
     getNextWeek,
     getDayEnd,
@@ -118,6 +129,7 @@ export {
     getDateHours,
     getDateAmPm,
     dateFromCustomStart,
-    hourFromMs,
-    getTwoDigitMinutes
+    getTwoDigitMinutes,
+    MS_TO_HR,
+    MS_PER_DAY
 }

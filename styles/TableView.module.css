@@ -1,95 +1,71 @@
-.bounds {
-    font-size: 14px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.boundInput {
-    display: flex;
-    flex-shrink: 0;
-    align-items: center;
-}
-
-.boundUpdate {
-    font-size: inherit;
-    padding: 5px 10px;
-    margin: 5px;
-    border-radius: var(--border-rad);
-}
-
-.boundArrow {
-    font-size: 20px;
-    margin: 0 min(10px, 1vw);
-    display: flex;
-    align-items: center;
-}
-
-.totalHours {
-    border: solid #fff;
-    border-width: 1px 0 0 0;
+.wrap {
+    position: relative;
+    width: 100%;
     padding: 20px;
-    text-align: center;
+    margin-bottom: 50px;
+    border-radius: var(--border-rad);
+    background-color: #111;
+}
+
+.wrap .row:last-child {
+    border: none;
 }
 
 .row {
-    width: 100vw;
-    height: 50px;
-    max-width: 500px;
+    position: relative;
     display: flex;
-    align-items: center;
+    justify-content: space-between;
+    height: 40px;
     font-size: 14px;
-    border: solid #fff;
-    border-width: 1px 0 0 0;
+    border: solid #333;
+    border-width: 0 0 1px 0;
 }
 
-.row > * {
+.row * {
     text-align: center;
 }
 
+.row > div {
+    display: flex;
+    align-items: center;
+}
+
+.day, .in, .out, .total {
+    width: 19vw;
+}
+
 .day {
-    width: 50%;
+    max-width: 150px;
 }
 
 .in, .out {
-    width: 25%;
+    max-width: 80px;
+}
+
+.total {
+    max-width: 100px;
 }
 
 .delete {
     position: relative;
-    width: 0;
+    display: grid;
+    place-items: center;
     overflow: hidden;
     border: none;
+    width: 0;
+    font-size: 20px;
     transition: width .3s ease;
 }
 
-.delete, .deleteHover {
-    font-size: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
 .deleteVisible {
-    width: 40px;
+    width: 20px;
 }
 
-.deleteHover {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    opacity: 0;
-    transition: opacity .3s ease;
-    background-color: #000;
+.delete * {
+    color: #ffcb68;
+    transition: color .5s ease;
 }
 
-.delete:hover {
-    background-color: transparent;
-}
-
-.delete:hover .deleteHover {
-    opacity: 1;
+.delete:hover * {
+    color: #fff;
 }

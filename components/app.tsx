@@ -44,6 +44,10 @@ const App: FC<AppProps> = props => {
         if (res.status !== 200) {
             const { message } = await res.json()
             console.log(message)
+        } else {
+            // remove deleted entries from client
+            const ids = await res.json()
+            setVisibleEntries(visibleEntries.filter(x => !(x?.id && ids.includes(x.id))))
         }
     }
 
@@ -52,7 +56,7 @@ const App: FC<AppProps> = props => {
     }, [minTime, maxTime])
 
     return (
-        <section className={styles.wrap}>
+        <main className={styles.wrap}>
             <Clock userEmail={props.userEmail} updateTimecard={getEntries} />
             <span className={styles.infoBar}>
                 <DateBounds min={minTime} setMin={setMinTime} max={maxTime} setMax={setMaxTime} />
@@ -60,7 +64,7 @@ const App: FC<AppProps> = props => {
             </span>
             <ChartView entries={visibleEntries} minTime={minTime} maxTime={maxTime} />
             <TableView entries={visibleEntries} deleteEntries={deleteEntries} />
-        </section>
+        </main>
     )
 }
 
