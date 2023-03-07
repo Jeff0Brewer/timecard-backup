@@ -1,0 +1,11 @@
+.wrap {
+    width: min(100vw, 700px);
+    padding: 0 10px;
+}
+
+.infoBar {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    font-size: 14px;
+}

@@ -12,7 +12,7 @@ const getEntries = async (req: NextApiRequest, res: NextApiResponse<EntriesRes>)
     }
     const query: Prisma.TimeEntryFindManyArgs = {
         where: { userEmail: req.body.userEmail },
-        orderBy: { date: 'desc' }
+        orderBy: { date: 'asc' }
     }
     if (typeof req.body?.minTime === 'string' && typeof req.body?.maxTime === 'string') {
         query.where = {

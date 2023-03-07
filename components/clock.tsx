@@ -1,10 +1,10 @@
 import React, { FC, useState, useEffect } from 'react'
 import type { EntryData, CustomStart } from '@/lib/types'
 import { newEntryData } from '@/lib/types'
-import { getTimeString, getDateStringLong, dateFromCustomStart } from '@/lib/date-util'
-import { postBody } from '@/lib/fetch-util'
+import { getDateStringLong, dateFromCustomStart } from '@/lib/date-util'
+import { postBody, getDateJson } from '@/lib/fetch-util'
 import StartTime from '@/components/start-time'
-import styles from '@/styles/ClockIn.module.css'
+import styles from '@/styles/Clock.module.css'
 
 type ClockInProps = {
     userEmail: string,
@@ -18,28 +18,29 @@ const ClockIn: FC<ClockInProps> = props => {
 
     const getLastEntry = async () => {
         const res = await fetch('/api/get-last-entry', postBody({ userEmail: props.userEmail }))
-        if (res.status === 200) {
-            const entry = await res.json()
-            entry.date = new Date(entry.date)
-            setLastEntry(entry)
+        if (res.ok) {
+            setLastEntry(await getDateJson(res))
         } else {
-            setLastEntry(newEntryData())
+            const { message } = await res.json()
+            console.log(message)
         }
     }
 
     // clock in / out based on current clock state
     const clockIn = async () => {
-        // use custom start time if clocking in, custom is defined,
-        // and custom is later than current time
         let date: Date = new Date()
+        // use custom start time if valid date provided
         if (!lastEntry.clockIn && customStart) {
             const customDate = dateFromCustomStart(customStart)
-            if (customDate > date) date = customDate
+            if (customDate > date && customDate > lastEntry.date) {
+                date = customDate
+            }
         }
-        // ensure clock out is after clock in
+        // prevent clocking out before clock in time
         if (lastEntry.clockIn && date < lastEntry.date) {
             date = new Date(lastEntry.date.getTime() + 1)
         }
+
         const entry: EntryData = {
             date,
             clockIn: !lastEntry.clockIn,
@@ -47,29 +48,26 @@ const ClockIn: FC<ClockInProps> = props => {
         }
         setLastEntry(entry)
         const res = await fetch('/api/add-entry', postBody(entry))
-        if (res.status === 200) {
+        if (res.ok) {
             props.updateTimecard()
-            const entry = await res.json()
-            entry.date = new Date(entry.date)
-            setLastEntry(entry)
+            setLastEntry(await getDateJson(res))
             setCustomStart(null)
         } else {
-            getLastEntry() // revert clock state on failure
             const { message } = await res.json()
             console.log(message)
+            getLastEntry() // revert clock state on failure
         }
     }
 
     useEffect(() => {
         getLastEntry()
-        const intervalId = setInterval(() => setDisplayTime(new Date()), 10000)
+        const intervalId = window.setInterval(() => setDisplayTime(new Date()), 5000)
         return () => { window.clearInterval(intervalId) }
     }, [])
 
     return (
         <section className={styles.wrap}>
             <p className={styles.date}>{getDateStringLong(displayTime)}</p>
-            <p className={styles.time}>{getTimeString(displayTime)}</p>
             <StartTime lastEntry={lastEntry} setCustomStart={setCustomStart} />
             <button className={styles.clockIn} onClick={clockIn}>Clock {lastEntry.clockIn ? 'Out' : 'In'}</button>
         </section>

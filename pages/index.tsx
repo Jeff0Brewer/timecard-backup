@@ -2,7 +2,7 @@ import React from 'react'
 import Head from 'next/head'
 import { useSession, signOut } from 'next-auth/react'
 import SignIn from '@/components/sign-in'
-import Timecard from '@/components/timecard'
+import App from '@/components/app'
 import styles from '@/styles/Home.module.css'
 
 export default function Home () {
@@ -10,15 +10,15 @@ export default function Home () {
     return (
         <>
             <Head>
-                <title>Timecard</title>
+                <title>Timecard Backup</title>
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className={styles.home}>{
                 session?.user?.email
                     ? <div>
+                        <App userEmail={session.user.email} />
                         <button className={styles.signOut} onClick={() => signOut()}>log out</button>
-                        <Timecard userEmail={session.user.email} />
                     </div>
                     : <SignIn />
             }</main>

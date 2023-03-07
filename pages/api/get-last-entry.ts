@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { EntryData } from '@/lib/types'
+import { newEntryData } from '@/lib/types'
 import prisma from '@/prisma/client'
 
 type ClockInRes = EntryData | null | { message: string }
@@ -15,9 +16,9 @@ const getLastEntry = async (req: NextApiRequest, res: NextApiResponse<ClockInRes
     })
     if (entry) {
         res.status(200).send(entry)
-        return
+    } else {
+        res.status(200).send(newEntryData())
     }
-    res.status(404).send({ message: 'No entries found' })
 }
 
 export default getLastEntry

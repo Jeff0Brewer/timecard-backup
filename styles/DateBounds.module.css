@@ -1,0 +1,15 @@
+.wrap {
+    display: flex;
+    align-items: center;
+}
+
+.wrap input {
+    width: 60px;
+    font-size: inherit;
+    text-align: center;
+}
+
+.arrow {
+    font-size: 12px;
+    margin: 0 5px;
+}

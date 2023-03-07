@@ -6,6 +6,15 @@ const postBody = (data: object) => {
     }
 }
 
+const getDateJson = (res: Response) => {
+    return res.json()
+        .then(data => {
+            data.date = new Date(data.date)
+            return data
+        })
+}
+
 export {
-    postBody
+    postBody,
+    getDateJson
 }

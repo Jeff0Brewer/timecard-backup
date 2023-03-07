@@ -23,7 +23,7 @@ const isEntryData = (x: any) => {
 const newEntryData = () => {
     const entry: EntryData = {
         date: new Date(),
-        clockIn: true,
+        clockIn: false,
         userEmail: ''
     }
     return entry

@@ -1,16 +1,24 @@
 .home {
-    display: grid;
-    place-items: center;
-    min-height: 80vh;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 100px;
 }
 
 .signOut {
     position: absolute;
-    top: 0;
+    left: 0;
     right: 0;
-    margin: 10px;
+    margin: auto;
     width: 75px;
     height: 40px;
     font-size: 14px;
+    color: #000;
+    border: none;
     border-radius: var(--border-rad);
+    background-color: var(--accent-color);
+    transition: background-color .3s ease;
+}
+
+.signOut:hover {
+    background-color: #fff;
 }
