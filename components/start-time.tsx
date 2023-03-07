@@ -30,7 +30,7 @@ const StartInput: FC<StartInputProps> = props => {
     const updateCustomStart = (e: React.ChangeEvent<HTMLInputElement>) => {
         // revert start time to last valid entry after delay
         window.clearTimeout(revertTimerRef.current)
-        revertTimerRef.current = window.setTimeout(revertInvalid, 2000)
+        revertTimerRef.current = window.setTimeout(revertInvalid, 3000)
 
         // parse hour, minute, am/pm from text input
         const str = e.target.value
@@ -57,11 +57,7 @@ const StartInput: FC<StartInputProps> = props => {
     }
 
     useEffect(() => {
-        return () => {
-            if (revertTimerRef.current) {
-                window.clearTimeout(revertTimerRef.current)
-            }
-        }
+        return () => window.clearTimeout(revertTimerRef.current)
     }, [])
 
     return (
