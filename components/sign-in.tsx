@@ -5,8 +5,10 @@ import styles from '@/styles/SignIn.module.css'
 const SignIn: FC = () => {
     return (
         <section className={styles.wrap}>
-            <h1 className={styles.header}>Timecard Backup</h1>
-            <button className={styles.signIn} onClick={() => signIn()}>Log In</button>
+            <div>
+                <h1 className={styles.header}>Timecard Backup</h1>
+                <button className={styles.signIn} onClick={() => signIn()}>Log In</button>
+            </div>
         </section>
     )
 }
