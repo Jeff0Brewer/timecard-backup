@@ -35,15 +35,15 @@
 }
 
 .day {
-    max-width: 150px;
+    max-width: 100px;
 }
 
 .in, .out {
-    max-width: 80px;
+    max-width: 60px;
 }
 
 .total {
-    max-width: 100px;
+    max-width: 60px;
 }
 
 .delete {
@@ -52,7 +52,7 @@
     place-items: center;
     overflow: hidden;
     width: 0;
-    font-size: 20px;
+    font-size: 18px;
     transition: width .3s ease;
 }
 

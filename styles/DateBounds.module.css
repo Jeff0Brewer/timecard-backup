@@ -4,12 +4,12 @@
 }
 
 .wrap input {
-    width: 65px;
+    width: 60px;
     font-size: inherit;
     text-align: center;
 }
 
 .arrow {
-    font-size: 15px;
+    font-size: 12px;
     margin: 0 5px;
 }
