@@ -35,15 +35,15 @@
 }
 
 .day {
-    max-width: 100px;
+    max-width: 120px;
 }
 
 .in, .out {
-    max-width: 60px;
+    max-width: 70px;
 }
 
 .total {
-    max-width: 60px;
+    max-width: 70px;
 }
 
 .delete {
