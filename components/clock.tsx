@@ -61,7 +61,7 @@ const ClockIn: FC<ClockInProps> = props => {
 
     useEffect(() => {
         getLastEntry()
-        const intervalId = window.setInterval(() => setDisplayTime(new Date()), 1000)
+        const intervalId = window.setInterval(() => setDisplayTime(new Date()), 5000)
         return () => { window.clearInterval(intervalId) }
     }, [])
 
