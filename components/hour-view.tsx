@@ -11,9 +11,9 @@ const HourView: FC<HourViewProps> = props => {
 
     useEffect(() => {
         let total = 0
-        for (let i = props.entries.length - 1; i >= 0; i -= 2) {
+        for (let i = 0; i < props.entries.length; i += 2) {
+            const t1 = props.entries[i + 1].date.getTime()
             const t0 = props.entries[i].date.getTime()
-            const t1 = props.entries[i - 1].date.getTime()
             total += (t1 - t0) * MS_TO_HR
         }
         setTotal(getHourString(total))
