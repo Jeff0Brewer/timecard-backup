@@ -26,6 +26,7 @@ const StartInput: FC<StartInputProps> = props => {
     const inputRef = useRef<HTMLInputElement>(null)
     const lastValidRef = useRef<string>(getTimeString(new Date()))
     const revertTimerRef = useRef<number>(-1)
+    const updateIntervalRef = useRef<number>(-1)
 
     const updateCustomStart = (e: React.ChangeEvent<HTMLInputElement>) => {
         // revert start time to last valid entry after delay
@@ -46,6 +47,8 @@ const StartInput: FC<StartInputProps> = props => {
                 const custom: CustomStart = { hour, minute, ampm }
                 lastValidRef.current = `${hour}:${getTwoDigitMinutes(minute)} ${ampm}`
                 props.setCustomStart(custom)
+                // stop start time value updates since custom entered
+                window.clearInterval(updateIntervalRef.current)
             }
         }
     }
@@ -57,7 +60,19 @@ const StartInput: FC<StartInputProps> = props => {
     }
 
     useEffect(() => {
-        return () => window.clearTimeout(revertTimerRef.current)
+        // start interval to update start time value to curr time until custom entered
+        updateIntervalRef.current = window.setInterval(() => {
+            // only update if input element doesn't have focus
+            if (inputRef.current && document.activeElement !== inputRef.current) {
+                const time = getTimeString(new Date())
+                inputRef.current.value = time
+                lastValidRef.current = time
+            }
+        }, 5000)
+        return () => {
+            window.clearTimeout(revertTimerRef.current)
+            window.clearInterval(updateIntervalRef.current)
+        }
     }, [])
 
     return (
