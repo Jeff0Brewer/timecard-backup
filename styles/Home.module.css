@@ -22,3 +22,23 @@
 .signOut:hover {
     background-color: #fff;
 }
+
+.loading {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(0deg, transparent 40%, var(--accent-color) 40%, transparent 70%);
+    background-size: 400% 400%;
+    animation: gradient 3s ease-in-out infinite;
+}
+
+@keyframes gradient {
+    from {
+        background-position: 50% 100%;
+    }
+    to {
+        background-position: 50% 0%;
+    }
+}

@@ -11,7 +11,7 @@ export default function Home () {
     const renderFromStatus = (status: string) => {
         switch (status) {
             case 'loading':
-                return <p>loading</p>
+                return <div className={styles.loading}></div>
 
             case 'unauthenticated':
                 return <SignIn />
