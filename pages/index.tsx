@@ -6,7 +6,31 @@ import App from '@/components/app'
 import styles from '@/styles/Home.module.css'
 
 export default function Home () {
-    const { data: session } = useSession()
+    const { data: session, status } = useSession()
+
+    const renderFromStatus = (status: string) => {
+        switch (status) {
+            case 'loading':
+                return <p>loading</p>
+
+            case 'unauthenticated':
+                return <SignIn />
+
+            case 'authenticated':
+                if (!session?.user?.email) {
+                    throw new Error('No user email in current session')
+                }
+                return (
+                    <div>
+                        <App userEmail={session.user.email} />
+                        <button className={styles.signOut} onClick={() => signOut()}>
+                            log out
+                        </button>
+                    </div>
+                )
+        }
+    }
+
     return (
         <>
             <Head>
@@ -14,14 +38,7 @@ export default function Home () {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <main className={styles.home}>{
-                session?.user?.email
-                    ? <div>
-                        <App userEmail={session.user.email} />
-                        <button className={styles.signOut} onClick={() => signOut()}>log out</button>
-                    </div>
-                    : <SignIn />
-            }</main>
+            <main className={styles.home}>{ renderFromStatus(status) }</main>
         </>
     )
 }
