@@ -4,14 +4,14 @@ import { getTimeString, getTwoDigitMinutes } from '@/lib/date-util'
 import styles from '@/styles/Clock.module.css'
 
 type StartTimeProps = {
-    lastEntry: EntryData,
+    lastEntry: EntryData | null,
     setCustomStart: (custom: CustomStart) => void
 }
 
 const StartTime: FC<StartTimeProps> = props => {
     return (
         <span className={styles.startTime}>{
-            props.lastEntry.clockIn
+            props.lastEntry?.clockIn
                 ? <p>started - {getTimeString(props.lastEntry.date)}</p>
                 : <StartInput setCustomStart={props.setCustomStart} />
         }</span>
