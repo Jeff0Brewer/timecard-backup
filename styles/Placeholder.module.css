@@ -5,6 +5,7 @@
     background-size: 400% 100%;
     animation: wipe 3s ease-in-out infinite;
     color: transparent;
+    user-select: none;
 }
 
 @keyframes wipe {
