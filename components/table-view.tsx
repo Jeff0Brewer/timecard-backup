@@ -2,7 +2,9 @@ import React, { FC, useState } from 'react'
 import { RiDeleteBackFill } from 'react-icons/ri'
 import type { EntryData } from '@/lib/types'
 import { getDateStringMed, getTimeStringShort, getHourString, MS_TO_HR } from '@/lib/date-util'
+import Loader from '@/components/loader'
 import styles from '@/styles/TableView.module.css'
+import placeholder from '@/styles/Placeholder.module.css'
 
 type TableViewProps = {
     entries: Array<EntryData>
@@ -27,9 +29,17 @@ const TableView: FC<TableViewProps> = props => {
     }
 
     return (
-        <section className={styles.wrap}>{
-            getDayRows()
-        }</section>
+        <Loader
+            loaded={props.loaded}
+            placeholder={
+                <section className={`${styles.placeholder} ${placeholder.style}`}></section>
+            }
+            content={
+                <section className={styles.wrap}>{
+                    getDayRows()
+                }</section>
+            }
+        />
     )
 }
 

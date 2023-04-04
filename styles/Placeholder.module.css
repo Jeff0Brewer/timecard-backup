@@ -3,7 +3,7 @@
     background-color: #f0f;
     background: linear-gradient(90deg, #111 30%, var(--accent-color) 70%, #111 70%);
     background-size: 400% 100%;
-    animation: wipe 2s ease-in-out infinite .5s;
+    animation: wipe 3s ease-in-out infinite;
     color: transparent;
 }
 

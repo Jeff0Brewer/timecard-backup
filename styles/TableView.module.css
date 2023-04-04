@@ -1,8 +1,15 @@
+.wrap, .placeholder {
+    width: 100%;
+    margin: 30px 0;
+    padding: 20px;
+}
+
+.placeholder {
+    height: 150px;
+}
+
 .wrap {
     position: relative;
-    width: 100%;
-    padding: 20px;
-    margin: 30px 0;
     border-radius: var(--border-rad);
     background-color: #111;
 }

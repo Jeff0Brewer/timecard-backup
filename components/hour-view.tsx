@@ -1,6 +1,8 @@
 import React, { FC, useState, useEffect } from 'react'
 import type { EntryData } from '@/lib/types'
 import { getHourString } from '@/lib/date-util'
+import Loader from '@/components/loader'
+import placeholder from '@/styles/Placeholder.module.css'
 
 type HourViewProps = {
     entries: Array<EntryData>,
@@ -21,7 +23,15 @@ const HourView: FC<HourViewProps> = props => {
     }, [props.entries])
 
     return (
-        <p>total: {total}</p>
+        <Loader
+            loaded={props.loaded}
+            placeholder={
+                <p className={placeholder.style}>total: x:xx</p>
+            }
+            content ={
+                <p>total: {total}</p>
+            }
+        />
     )
 }
 

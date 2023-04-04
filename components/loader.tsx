@@ -13,7 +13,7 @@ const Loader: FC<LoaderProps> = props => {
     useEffect(() => {
         // set done state after waiting for animation to finish
         if (!done && props.loaded) {
-            window.setTimeout(() => setDone(true), 1000)
+            window.setTimeout(() => { setDone(true) }, 1000)
         }
     }, [props.loaded])
 
