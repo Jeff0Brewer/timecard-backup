@@ -17,6 +17,7 @@ const App: FC<AppProps> = props => {
     const [visibleEntries, setVisibleEntries] = useState<Array<EntryData>>([])
     const [maxTime, setMaxTime] = useState<Date>(getDayEnd(new Date()))
     const [minTime, setMinTime] = useState<Date>(getPrevWeek(new Date()))
+    const [loaded, setLoaded] = useState<boolean>(false)
 
     const getEntries = async () => {
         const res = await fetch('/api/get-entries', postBody({
@@ -37,6 +38,7 @@ const App: FC<AppProps> = props => {
             entries.pop()
         }
         setVisibleEntries(entries)
+        setLoaded(true)
     }
 
     const deleteEntries = async (ids: Array<string>) => {
@@ -57,13 +59,34 @@ const App: FC<AppProps> = props => {
 
     return (
         <div className={styles.wrap}>
-            <Clock userEmail={props.userEmail} updateTimecard={getEntries} />
+            <Clock
+                userEmail={props.userEmail}
+                updateTimecard={getEntries}
+            />
             <span className={styles.infoBar}>
-                <DateBounds min={minTime} setMin={setMinTime} max={maxTime} setMax={setMaxTime} />
-                <HourView entries={visibleEntries} />
+                <DateBounds
+                    min={minTime}
+                    setMin={setMinTime}
+                    max={maxTime}
+                    setMax={setMaxTime}
+                    loaded={loaded}
+                />
+                <HourView
+                    entries={visibleEntries}
+                    loaded={loaded}
+                />
             </span>
-            <ChartView entries={visibleEntries} minTime={minTime} maxTime={maxTime} />
-            <TableView entries={visibleEntries} deleteEntries={deleteEntries} />
+            <ChartView
+                entries={visibleEntries}
+                minTime={minTime}
+                maxTime={maxTime}
+                loaded={loaded}
+            />
+            <TableView
+                entries={visibleEntries}
+                deleteEntries={deleteEntries}
+                loaded={loaded}
+            />
         </div>
     )
 }

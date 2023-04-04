@@ -1,13 +1,15 @@
 import React, { FC, useRef, useEffect } from 'react'
 import { FaCaretRight } from 'react-icons/fa'
 import { getDateString, getDayStart, getDayEnd } from '@/lib/date-util'
+import Loader from '@/components/loader'
 import styles from '@/styles/DateBounds.module.css'
 
 type DateBoundsProps = {
     min: Date,
     max: Date,
     setMin: (d: Date) => void,
-    setMax: (d: Date) => void
+    setMax: (d: Date) => void,
+    loaded: boolean
 }
 
 const DateBounds: FC<DateBoundsProps> = props => {

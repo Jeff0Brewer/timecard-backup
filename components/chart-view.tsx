@@ -9,7 +9,8 @@ import styles from '@/styles/ChartView.module.css'
 type ChartViewProps = {
     entries: Array<EntryData>,
     minTime: Date,
-    maxTime: Date
+    maxTime: Date,
+    loaded: boolean
 }
 
 const ChartView: FC<ChartViewProps> = props => {

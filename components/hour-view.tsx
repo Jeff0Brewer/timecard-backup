@@ -3,7 +3,8 @@ import type { EntryData } from '@/lib/types'
 import { getHourString } from '@/lib/date-util'
 
 type HourViewProps = {
-    entries: Array<EntryData>
+    entries: Array<EntryData>,
+    loaded: boolean
 }
 
 const HourView: FC<HourViewProps> = props => {

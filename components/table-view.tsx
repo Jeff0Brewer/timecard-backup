@@ -6,7 +6,8 @@ import styles from '@/styles/TableView.module.css'
 
 type TableViewProps = {
     entries: Array<EntryData>
-    deleteEntries: (ids: Array<string>) => void
+    deleteEntries: (ids: Array<string>) => void,
+    loaded: boolean
 }
 
 const TableView: FC<TableViewProps> = props => {
