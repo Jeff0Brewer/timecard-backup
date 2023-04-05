@@ -1,10 +1,6 @@
 .wrap {
-    width: min(100vw, 700px);
-    padding: 50px 10px 0 10px;
-}
-
-.wrap section {
-    margin-bottom: 30px;
+    width: var(--max-width);
+    padding: 0 var(--app-padding);
 }
 
 .infoBar {
