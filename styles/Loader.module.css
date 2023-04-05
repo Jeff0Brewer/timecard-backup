@@ -10,7 +10,7 @@
 .hide, .show {
     position: relative;
     z-index: 100;
-    transition: opacity .5s ease;
+    transition: opacity .3s ease;
 }
 
 .hide {
