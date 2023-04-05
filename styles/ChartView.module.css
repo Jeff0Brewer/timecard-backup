@@ -1,11 +1,15 @@
-.wrap {
-    position: relative;
-    width: 100%;
+.wrap, .placeholder {
+    /* calculated width value for chartjs responsiveness */
+    width: calc(var(--max-width) - 2*var(--app-padding));
     height: 180px;
-    padding: 20px;
     margin-bottom: 30px;
+}
+
+.wrap {
+    padding: 20px;
     background-color: #111;
     border-radius: var(--border-rad);
+    position: relative;
 }
 
 .wrap * {

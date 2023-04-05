@@ -4,12 +4,15 @@ import { Chart, CategoryScale, LinearScale, LineElement, PointElement } from 'ch
 import { Line } from 'react-chartjs-2'
 import type { EntryData } from '@/lib/types'
 import { getDateString, MS_TO_HR, MS_PER_DAY } from '@/lib/date-util'
+import Loader from '@/components/loader'
 import styles from '@/styles/ChartView.module.css'
+import placeholder from '@/styles/Placeholder.module.css'
 
 type ChartViewProps = {
     entries: Array<EntryData>,
     minTime: Date,
-    maxTime: Date
+    maxTime: Date,
+    loaded: boolean
 }
 
 const ChartView: FC<ChartViewProps> = props => {
@@ -46,9 +49,17 @@ const ChartView: FC<ChartViewProps> = props => {
     }, [props.entries])
 
     return (
-        <section className={styles.wrap}>
-            <Line data={data} options={options} />
-        </section>
+        <Loader
+            loaded={props.loaded}
+            placeholder={
+                <section className={`${placeholder.style} ${styles.placeholder}`}></section>
+            }
+            content={
+                <section className={styles.wrap}>
+                    <Line data={data} options={options} />
+                </section>
+            }
+        />
     )
 }
 

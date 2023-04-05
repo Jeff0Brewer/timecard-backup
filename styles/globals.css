@@ -4,6 +4,8 @@
     --border-rad: 4px;
     --hover-opacity: .7;
     --accent-color: #ffcb68;
+    --max-width: min(100vw, 700px);
+    --app-padding: 10px;
 }
 
 * {

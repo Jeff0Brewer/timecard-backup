@@ -1,6 +1,6 @@
 .wrap {
-    width: min(100vw, 700px);
-    padding: 0 10px;
+    width: var(--max-width);
+    padding: 0 var(--app-padding);
 }
 
 .infoBar {

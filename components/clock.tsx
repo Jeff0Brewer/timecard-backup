@@ -1,10 +1,11 @@
 import React, { FC, useState, useEffect } from 'react'
 import type { EntryData, CustomStart } from '@/lib/types'
-import { newEntryData } from '@/lib/types'
 import { getDateStringLong, dateFromCustomStart } from '@/lib/date-util'
 import { postBody, getDateJson } from '@/lib/fetch-util'
 import StartTime from '@/components/start-time'
+import Loader from '@/components/loader'
 import styles from '@/styles/Clock.module.css'
+import placeholder from '@/styles/Placeholder.module.css'
 
 type ClockInProps = {
     userEmail: string,
@@ -13,7 +14,7 @@ type ClockInProps = {
 
 const ClockIn: FC<ClockInProps> = props => {
     const [displayTime, setDisplayTime] = useState<Date>(new Date())
-    const [lastEntry, setLastEntry] = useState<EntryData>(newEntryData())
+    const [lastEntry, setLastEntry] = useState<EntryData | null>(null)
     const [customStart, setCustomStart] = useState<CustomStart | null>(null)
 
     const getLastEntry = async () => {
@@ -28,6 +29,9 @@ const ClockIn: FC<ClockInProps> = props => {
 
     // clock in / out based on current clock state
     const clockIn = async () => {
+        // prevent entry creation before state fetched
+        if (!lastEntry) { return }
+
         let date: Date = new Date()
         // use custom start time if valid date provided
         if (!lastEntry.clockIn && customStart) {
@@ -66,11 +70,22 @@ const ClockIn: FC<ClockInProps> = props => {
     }, [])
 
     return (
-        <section className={styles.wrap}>
-            <p className={styles.date}>{getDateStringLong(displayTime)}</p>
-            <StartTime lastEntry={lastEntry} setCustomStart={setCustomStart} />
-            <button className={styles.clockIn} onClick={clockIn}>Clock {lastEntry.clockIn ? 'Out' : 'In'}</button>
-        </section>
+        <Loader loaded={!!lastEntry}
+            placeholder={
+                <section className={styles.wrap}>
+                    <p className={`${placeholder.style} ${styles.datePlaceholder}`}>date</p>
+                    <p className={`${placeholder.style} ${styles.startTimePlaceholder}`}>start</p>
+                    <div className={`${placeholder.style} ${styles.clockInPlaceholder}`}>clockin</div>
+                </section>
+            }
+            content={
+                <section className={styles.wrap}>
+                    <p className={styles.date}>{getDateStringLong(displayTime)}</p>
+                    <StartTime lastEntry={lastEntry} setCustomStart={setCustomStart} />
+                    <button className={styles.clockIn} onClick={clockIn}>Clock {lastEntry?.clockIn ? 'Out' : 'In'}</button>
+                </section>
+            }
+        />
     )
 }
 

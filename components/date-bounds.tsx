@@ -1,13 +1,16 @@
 import React, { FC, useRef, useEffect } from 'react'
 import { FaCaretRight } from 'react-icons/fa'
 import { getDateString, getDayStart, getDayEnd } from '@/lib/date-util'
+import Loader from '@/components/loader'
 import styles from '@/styles/DateBounds.module.css'
+import placeholder from '@/styles/Placeholder.module.css'
 
 type DateBoundsProps = {
     min: Date,
     max: Date,
     setMin: (d: Date) => void,
-    setMax: (d: Date) => void
+    setMax: (d: Date) => void,
+    loaded: boolean
 }
 
 const DateBounds: FC<DateBoundsProps> = props => {
@@ -20,11 +23,19 @@ const DateBounds: FC<DateBoundsProps> = props => {
     }
 
     return (
-        <div className={styles.wrap}>
-            <DateInput default={props.min} setValue={setMin} />
-            <FaCaretRight className={styles.arrow} />
-            <DateInput default={props.max} setValue={setMax} />
-        </div>
+        <Loader
+            loaded={props.loaded}
+            placeholder={
+                <div className={`${styles.placeholder} ${placeholder.style}`}>datein</div>
+            }
+            content={
+                <div className={styles.wrap}>
+                    <DateInput default={props.min} setValue={setMin} />
+                    <FaCaretRight className={styles.arrow} />
+                    <DateInput default={props.max} setValue={setMax} />
+                </div>
+            }
+        />
     )
 }
 

@@ -1,0 +1,23 @@
+.wrap {
+    display: grid;
+}
+
+.wrap > * {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.hide, .show {
+    position: relative;
+    z-index: 100;
+    transition: opacity .3s ease;
+}
+
+.hide {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.show {
+    opacity: 1;
+}
