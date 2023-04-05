@@ -17,14 +17,12 @@ const Loader: FC<LoaderProps> = props => {
         }
     }, [props.loaded])
 
-    // render placeholder only if not done loading
     return (
-        <div>
-            { done || <div className={styles.placeholder}>
+        <div className={done ? '' : styles.wrap}>
+            { done ||
                 <div className={props.loaded ? styles.hide : styles.show}>
                     { props.placeholder }
-                </div>
-            </div> }
+                </div> }
             { props.content }
         </div>
     )
