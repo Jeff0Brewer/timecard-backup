@@ -52,7 +52,7 @@ const ChartView: FC<ChartViewProps> = props => {
         <Loader
             loaded={props.loaded}
             placeholder={
-                <section className={`${placeholder.style} ${styles.wrap}`}></section>
+                <section className={`${placeholder.style} ${styles.placeholder}`}></section>
             }
             content={
                 <section className={styles.wrap}>
