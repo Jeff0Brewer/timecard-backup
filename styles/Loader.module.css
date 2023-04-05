@@ -6,7 +6,7 @@
 }
 
 .hide, .show {
-    transition: opacity .3s ease;
+    transition: opacity .5s ease;
 }
 
 .hide {
