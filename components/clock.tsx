@@ -73,8 +73,8 @@ const ClockIn: FC<ClockInProps> = props => {
         <Loader loaded={!!lastEntry}
             placeholder={
                 <section className={styles.wrap}>
-                    <div className={`${placeholder.style} ${styles.datePlaceholder}`}>date</div>
-                    <div className={`${placeholder.style} ${styles.startTimePlaceholder}`}>start</div>
+                    <p className={`${placeholder.style} ${styles.datePlaceholder}`}>date</p>
+                    <p className={`${placeholder.style} ${styles.startTimePlaceholder}`}>start</p>
                     <div className={`${placeholder.style} ${styles.clockInPlaceholder}`}>clockin</div>
                 </section>
             }
