@@ -1,24 +1,27 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import type { EntryData } from '@/lib/types'
+import type { EntryData, EntryResponse } from '@/lib/types'
 import { newEntryData } from '@/lib/types'
 import prisma from '@/prisma/client'
+import { hasSession, isPost, hasEmail } from '@/lib/api'
 
-type ClockInRes = EntryData | null | { message: string }
-
-const getLastEntry = async (req: NextApiRequest, res: NextApiResponse<ClockInRes>) => {
-    if (req.method !== 'POST' || typeof req.body?.userEmail !== 'string') {
-        res.status(405).send({ message: 'Must send user email in POST request' })
+const getLastEntry = async (req: NextApiRequest, res: NextApiResponse<EntryResponse>) => {
+    if (!(await hasSession(req, res))) {
+        // require current session
         return
     }
-    const entry = await prisma.timeEntry?.findFirst({
+    if (!isPost(req, res) || !hasEmail(req, res)) {
+        // require post request with email field
+        return
+    }
+
+    // find last entry
+    let entry: EntryData | null = await prisma.timeEntry?.findFirst({
         where: { userEmail: req.body.userEmail },
         orderBy: { date: 'desc' }
     })
-    if (entry) {
-        res.status(200).send(entry)
-    } else {
-        res.status(200).send(newEntryData())
-    }
+    // return new entry if entries currently empty
+    if (!entry) { entry = newEntryData() }
+    res.status(200).json({ data: [entry] })
 }
 
 export default getLastEntry

@@ -11,6 +11,8 @@ type EntryData = {
     id?: string
 }
 
+type EntryResponse = { data: Array<EntryData> } | { message: string }
+
 const isEntryData = (x: any) => {
     return (
         // allow dates as Date obj or string for json compatibility
@@ -36,5 +38,6 @@ export {
 
 export type {
     EntryData,
-    CustomStart
+    CustomStart,
+    EntryResponse
 }

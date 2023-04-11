@@ -6,7 +6,7 @@ import HourView from '@/components/hour-view'
 import ChartView from '@/components/chart-view'
 import TableView from '@/components/table-view'
 import { getDayEnd, getPrevWeek } from '@/lib/date-util'
-import { postBody } from '@/lib/fetch-util'
+import { postBody, handleEntryResponse } from '@/lib/api'
 import styles from '@/styles/App.module.css'
 
 type AppProps = {
@@ -25,10 +25,7 @@ const App: FC<AppProps> = props => {
             minTime,
             maxTime
         }))
-        const entries: Array<EntryData> = (await res.json()).map((entry: EntryData) => {
-            entry.date = new Date(entry.date)
-            return entry
-        })
+        const entries = await handleEntryResponse(res)
         // ensure oldest entry is clock-in instance
         if (entries.length && !entries[0].clockIn) {
             entries.shift()
@@ -43,14 +40,11 @@ const App: FC<AppProps> = props => {
 
     const deleteEntries = async (ids: Array<string>) => {
         const res = await fetch('/api/delete-entries', postBody({ ids }))
-        if (res.status !== 200) {
-            const { message } = await res.json()
-            console.log(message)
-        } else {
-            // remove deleted entries from client
-            const ids = await res.json()
-            setVisibleEntries(visibleEntries.filter(x => !(x?.id && ids.includes(x.id))))
-        }
+        await handleEntryResponse(res) // no return value
+        // remove deleted entries on success
+        setVisibleEntries(visibleEntries.filter((entry) =>
+            !(entry?.id && ids.includes(entry.id))
+        ))
     }
 
     useEffect(() => {

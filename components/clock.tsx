@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react'
 import type { EntryData, CustomStart } from '@/lib/types'
 import { getDateStringLong, dateFromCustomStart } from '@/lib/date-util'
-import { postBody, getDateJson } from '@/lib/fetch-util'
+import { postBody, handleEntryResponse } from '@/lib/api'
 import StartTime from '@/components/start-time'
 import Loader from '@/components/loader'
 import styles from '@/styles/Clock.module.css'
@@ -19,12 +19,8 @@ const ClockIn: FC<ClockInProps> = props => {
 
     const getLastEntry = async () => {
         const res = await fetch('/api/get-last-entry', postBody({ userEmail: props.userEmail }))
-        if (res.ok) {
-            setLastEntry(await getDateJson(res))
-        } else {
-            const { message } = await res.json()
-            console.log(message)
-        }
+        const entries = await handleEntryResponse(res)
+        setLastEntry(entries[0])
     }
 
     // clock in / out based on current clock state
@@ -50,17 +46,11 @@ const ClockIn: FC<ClockInProps> = props => {
             clockIn: !lastEntry.clockIn,
             userEmail: props.userEmail
         }
-        setLastEntry(entry)
         const res = await fetch('/api/add-entry', postBody(entry))
-        if (res.ok) {
-            props.updateTimecard()
-            setLastEntry(await getDateJson(res))
-            setCustomStart(null)
-        } else {
-            const { message } = await res.json()
-            console.log(message)
-            getLastEntry() // revert clock state on failure
-        }
+        const entries = await handleEntryResponse(res)
+        setLastEntry(entries[0])
+        setCustomStart(null)
+        props.updateTimecard()
     }
 
     useEffect(() => {

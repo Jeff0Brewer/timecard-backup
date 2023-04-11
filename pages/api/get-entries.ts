@@ -1,30 +1,29 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import type { EntryData } from '@/lib/types'
-import { Prisma } from '@prisma/client'
+import type { EntryData, EntryResponse } from '@/lib/types'
 import prisma from '@/prisma/client'
+import { hasSession, isPost, hasEmail, hasTimeBounds } from '@/lib/api'
 
-type EntriesRes = Array<EntryData> | { message: string }
-
-const getEntries = async (req: NextApiRequest, res: NextApiResponse<EntriesRes>) => {
-    if (req.method !== 'POST' || typeof req.body?.userEmail !== 'string') {
-        res.status(405).send({ message: 'Must send user email in POST request' })
+const getEntries = async (req: NextApiRequest, res: NextApiResponse<EntryResponse>) => {
+    if (!(await hasSession(req, res))) {
+        // require current session
         return
     }
-    const query: Prisma.TimeEntryFindManyArgs = {
-        where: { userEmail: req.body.userEmail },
-        orderBy: { date: 'asc' }
+    if (!isPost(req, res) || !hasEmail(req, res) || !hasTimeBounds(req, res)) {
+        // require post request with email and time bound fields
+        return
     }
-    if (typeof req.body?.minTime === 'string' && typeof req.body?.maxTime === 'string') {
-        query.where = {
-            ...query.where,
+    // get find entries and return
+    const entries: Array<EntryData> = await prisma.timeEntry?.findMany({
+        where: {
+            userEmail: req.body.userEmail,
             date: {
                 lte: req.body.maxTime,
                 gte: req.body.minTime
             }
-        }
-    }
-    const entries: Array<EntryData> = await prisma.timeEntry?.findMany(query)
-    res.status(200).send(entries)
+        },
+        orderBy: { date: 'asc' }
+    })
+    res.status(200).json({ data: entries })
 }
 
 export default getEntries
