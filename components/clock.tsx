@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react'
 import type { EntryData, CustomStart } from '@/lib/types'
 import { getDateStringLong, dateFromCustomStart } from '@/lib/date-util'
-import { postBody, handleEntryResponse } from '@/lib/fetch-util'
+import { postBody, handleEntryResponse } from '@/lib/api'
 import StartTime from '@/components/start-time'
 import Loader from '@/components/loader'
 import styles from '@/styles/Clock.module.css'
