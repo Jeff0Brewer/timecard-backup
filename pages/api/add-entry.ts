@@ -1,14 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { isEntryData, EntryData, EntryResponse } from '@/lib/types'
+import type { EntryData, EntryResponse } from '@/lib/types'
 import prisma from '@/prisma/client'
-import { checkSession } from '@/lib/api'
+import { hasSession, hasEntry } from '@/lib/api'
 
 const addEntry = async (req: NextApiRequest, res: NextApiResponse<EntryResponse>) => {
-    if (!checkSession(req, res)) return
-    if (req.method !== 'POST' || !isEntryData(req.body)) {
-        res.status(405).json({ message: 'Must send entry in POST request' })
-        return
-    }
+    // check current session and entry in request body
+    if (!(await hasSession(req, res)) || !hasEntry(req, res)) { return }
+
     const entry: EntryData = await prisma.timeEntry.create({ data: req.body })
     res.status(200).json({ data: [entry] })
 }

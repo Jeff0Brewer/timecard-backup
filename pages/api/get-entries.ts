@@ -2,14 +2,12 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import type { EntryData, EntryResponse } from '@/lib/types'
 import { Prisma } from '@prisma/client'
 import prisma from '@/prisma/client'
-import { checkSession } from '@/lib/api'
+import { hasSession, hasEmail } from '@/lib/api'
 
 const getEntries = async (req: NextApiRequest, res: NextApiResponse<EntryResponse>) => {
-    if (!checkSession(req, res)) return
-    if (req.method !== 'POST' || typeof req.body?.userEmail !== 'string') {
-        res.status(405).json({ message: 'Must send user email in POST request' })
-        return
-    }
+    // check current session and email in request body
+    if (!(await hasSession(req, res)) || !hasEmail(req, res)) { return }
+
     const query: Prisma.TimeEntryFindManyArgs = {
         where: { userEmail: req.body.userEmail },
         orderBy: { date: 'asc' }
