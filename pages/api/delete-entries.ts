@@ -1,8 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { EntryResponse } from '@/lib/types'
 import prisma from '@/prisma/client'
+import { checkSession } from '@/lib/api'
 
 const deleteEntries = async (req: NextApiRequest, res: NextApiResponse<EntryResponse>) => {
+    if (!checkSession(req, res)) return
     if (req.method !== 'POST' || !Array.isArray(req.body?.ids || typeof req.body.ids !== 'string')) {
         res.status(405).json({ message: 'Must send entry id array in POST request' })
         return
