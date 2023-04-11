@@ -1,21 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { isEntryData, EntryData } from '@/lib/types'
+import { isEntryData, EntryData, EntryResponse } from '@/lib/types'
 import prisma from '@/prisma/client'
 
-type AddResponse = EntryData | { message: string }
-
-const addEntry = async (req: NextApiRequest, res: NextApiResponse<AddResponse>) => {
+const addEntry = async (req: NextApiRequest, res: NextApiResponse<EntryResponse>) => {
     if (req.method !== 'POST' || !isEntryData(req.body)) {
-        res.status(405).send({ message: 'Must send entry in POST request' })
+        res.status(405).json({ message: 'Must send entry in POST request' })
         return
     }
-    try {
-        const entry = await prisma.timeEntry.create({ data: req.body })
-        res.status(200).send(entry)
-    } catch (e) {
-        console.log(e)
-        res.status(500).send({ message: 'entry creation failed' })
-    }
+    const entry: EntryData = await prisma.timeEntry.create({ data: req.body })
+    res.status(200).json({ data: [entry] })
 }
 
 export default addEntry
