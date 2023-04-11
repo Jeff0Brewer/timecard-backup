@@ -1,6 +1,6 @@
 import React, { FC, useRef, useEffect } from 'react'
 import { FaCaretRight } from 'react-icons/fa'
-import { getDateString, getDayStart, getDayEnd } from '@/lib/date-util'
+import { formatShort, getDayStart, getDayEnd } from '@/lib/date'
 import Loader from '@/components/loader'
 import styles from '@/styles/DateBounds.module.css'
 import placeholder from '@/styles/Placeholder.module.css'
@@ -46,7 +46,7 @@ type DateInputProps = {
 
 const DateInput: FC<DateInputProps> = props => {
     const inputRef = useRef<HTMLInputElement>(null)
-    const lastValidRef = useRef<string>(getDateString(props.default))
+    const lastValidRef = useRef<string>(formatShort(props.default))
     const revertTimerRef = useRef<number>(-1)
 
     const updateValue = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -70,7 +70,7 @@ const DateInput: FC<DateInputProps> = props => {
         let year = parseInt(matches[3])
         if (year < 100) { year += 2000 }
         const date = new Date(year, month - 1, day)
-        lastValidRef.current = getDateString(date)
+        lastValidRef.current = formatShort(date)
         props.setValue(date)
     }
 

@@ -1,6 +1,6 @@
 import React, { FC, useRef, useEffect } from 'react'
 import type { EntryData, CustomStart } from '@/lib/types'
-import { getTimeString, getTwoDigitMinutes } from '@/lib/date-util'
+import { formatTime, getTwoDigitMinutes } from '@/lib/date'
 import styles from '@/styles/Clock.module.css'
 
 type StartTimeProps = {
@@ -12,7 +12,7 @@ const StartTime: FC<StartTimeProps> = props => {
     return (
         <span className={styles.startTime}>{
             props.lastEntry?.clockIn
-                ? <p>started - {getTimeString(props.lastEntry.date)}</p>
+                ? <p>started - {formatTime(props.lastEntry.date)}</p>
                 : <StartInput setCustomStart={props.setCustomStart} />
         }</span>
     )
@@ -24,7 +24,7 @@ type StartInputProps = {
 
 const StartInput: FC<StartInputProps> = props => {
     const inputRef = useRef<HTMLInputElement>(null)
-    const lastValidRef = useRef<string>(getTimeString(new Date()))
+    const lastValidRef = useRef<string>(formatTime(new Date()))
     const revertTimerRef = useRef<number>(-1)
     const updateIntervalRef = useRef<number>(-1)
 
@@ -64,7 +64,7 @@ const StartInput: FC<StartInputProps> = props => {
         updateIntervalRef.current = window.setInterval(() => {
             // only update if input element doesn't have focus
             if (inputRef.current && document.activeElement !== inputRef.current) {
-                const time = getTimeString(new Date())
+                const time = formatTime(new Date())
                 inputRef.current.value = time
                 lastValidRef.current = time
             }

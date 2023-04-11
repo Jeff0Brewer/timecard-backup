@@ -5,7 +5,7 @@ import DateBounds from '@/components/date-bounds'
 import HourView from '@/components/hour-view'
 import ChartView from '@/components/chart-view'
 import TableView from '@/components/table-view'
-import { getDayEnd, getPrevWeek } from '@/lib/date-util'
+import { getDayEnd, getPrevWeek } from '@/lib/date'
 import { postBody, handleEntryResponse } from '@/lib/api'
 import styles from '@/styles/App.module.css'
 

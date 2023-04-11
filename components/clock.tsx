@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react'
 import type { EntryData, CustomStart } from '@/lib/types'
-import { getDateStringLong, dateFromCustomStart } from '@/lib/date-util'
+import { formatLong, fromCustom } from '@/lib/date'
 import { postBody, handleEntryResponse } from '@/lib/api'
 import StartTime from '@/components/start-time'
 import Loader from '@/components/loader'
@@ -31,7 +31,7 @@ const ClockIn: FC<ClockInProps> = props => {
         let date: Date = new Date()
         // use custom start time if valid date provided
         if (!lastEntry.clockIn && customStart) {
-            const customDate = dateFromCustomStart(customStart)
+            const customDate = fromCustom(customStart)
             if (customDate > date && customDate > lastEntry.date) {
                 date = customDate
             }
@@ -70,7 +70,7 @@ const ClockIn: FC<ClockInProps> = props => {
             }
             content={
                 <section className={styles.wrap}>
-                    <p className={styles.date}>{getDateStringLong(displayTime)}</p>
+                    <p className={styles.date}>{formatLong(displayTime)}</p>
                     <StartTime lastEntry={lastEntry} setCustomStart={setCustomStart} />
                     <button className={styles.clockIn} onClick={clockIn}>Clock {lastEntry?.clockIn ? 'Out' : 'In'}</button>
                 </section>

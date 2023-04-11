@@ -30,15 +30,15 @@ const MS_PER_DAY = 86400000
 
 const currYear = (new Date()).getFullYear() % 100
 
-const getDateStringLong = (date: Date): string => {
+const formatLong = (date: Date): string => {
     const weekday = WEEKDAYS[date.getDay()]
     const month = MONTHS[date.getMonth()]
     const day = date.getDate()
-    const time = getTimeString(date)
+    const time = formatTime(date)
     return `${weekday}. ${month} ${day}, ${time}`
 }
 
-const getDateStringMed = (date: Date): string => {
+const formatMed = (date: Date): string => {
     const weekday = WEEKDAYS[date.getDay()]
     const month = date.getMonth() + 1
     const day = date.getDate()
@@ -49,7 +49,7 @@ const getDateStringMed = (date: Date): string => {
     return str
 }
 
-const getDateString = (date: Date): string => {
+const formatShort = (date: Date): string => {
     const month = date.getMonth() + 1
     const day = date.getDate()
     const year = date.getFullYear() % 100
@@ -58,18 +58,18 @@ const getDateString = (date: Date): string => {
     return `${monthStr}.${dayStr}.${year}`
 }
 
-const getTimeString = (date: Date): string => {
+const formatTime = (date: Date): string => {
     return date.toLocaleString('en-US', {
         hour: 'numeric',
         minute: 'numeric'
     }).toLowerCase()
 }
 
-const getTimeStringShort = (date: Date): string => {
-    return getTimeString(date).replace(/[ m]/g, '')
+const formatTimeShort = (date: Date): string => {
+    return formatTime(date).replace(/[ m]/g, '')
 }
 
-const getHourString = (hours: number): string => {
+const formatHours = (hours: number): string => {
     const minute = Math.floor(60 * (hours % 1))
     const minStr = minute < 10 ? '0' + minute : minute
     const hour = Math.floor(hours)
@@ -92,7 +92,7 @@ const getPrevWeek = (date: Date): Date => {
     return date
 }
 
-const dateFromCustomStart = (custom: CustomStart): Date => {
+const fromCustom = (custom: CustomStart): Date => {
     const hours = (custom.hour % 12) + (custom.ampm === 'pm' ? 12 : 0)
     const now = new Date()
     return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, custom.minute)
@@ -103,16 +103,16 @@ const getTwoDigitMinutes = (minutes: number): string => {
 }
 
 export {
-    getHourString,
-    getTimeString,
-    getTimeStringShort,
-    getDateString,
-    getDateStringMed,
-    getDateStringLong,
-    getPrevWeek,
+    formatLong,
+    formatMed,
+    formatShort,
+    formatTime,
+    formatTimeShort,
+    formatHours,
     getDayStart,
     getDayEnd,
-    dateFromCustomStart,
+    getPrevWeek,
+    fromCustom,
     getTwoDigitMinutes,
     MS_TO_HR,
     MS_PER_DAY
