@@ -14,11 +14,11 @@ type DateBoundsProps = {
 }
 
 const DateBounds: FC<DateBoundsProps> = props => {
-    const setMin = (date: Date) => {
+    const setMin = (date: Date): void => {
         props.setMin(getDayStart(date))
     }
 
-    const setMax = (date: Date) => {
+    const setMax = (date: Date): void => {
         props.setMax(getDayEnd(date))
     }
 
@@ -49,7 +49,7 @@ const DateInput: FC<DateInputProps> = props => {
     const lastValidRef = useRef<string>(getDateString(props.default))
     const revertTimerRef = useRef<number>(-1)
 
-    const updateValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const updateValue = (e: React.ChangeEvent<HTMLInputElement>): void => {
         // revert date to last valid entry after delay
         window.clearTimeout(revertTimerRef.current)
         revertTimerRef.current = window.setTimeout(revertInvalid, 3000)
@@ -74,7 +74,7 @@ const DateInput: FC<DateInputProps> = props => {
         props.setValue(date)
     }
 
-    const revertInvalid = () => {
+    const revertInvalid = (): void => {
         if (inputRef.current) {
             inputRef.current.value = lastValidRef.current
         }

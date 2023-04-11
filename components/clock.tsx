@@ -17,14 +17,14 @@ const ClockIn: FC<ClockInProps> = props => {
     const [lastEntry, setLastEntry] = useState<EntryData | null>(null)
     const [customStart, setCustomStart] = useState<CustomStart | null>(null)
 
-    const getLastEntry = async () => {
+    const getLastEntry = async (): Promise<void> => {
         const res = await fetch('/api/get-last-entry', postBody({ userEmail: props.userEmail }))
         const entries = await handleEntryResponse(res)
         setLastEntry(entries[0])
     }
 
     // clock in / out based on current clock state
-    const clockIn = async () => {
+    const clockIn = async (): Promise<void> => {
         // prevent entry creation before state fetched
         if (!lastEntry) { return }
 

@@ -28,7 +28,7 @@ const StartInput: FC<StartInputProps> = props => {
     const revertTimerRef = useRef<number>(-1)
     const updateIntervalRef = useRef<number>(-1)
 
-    const updateCustomStart = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const updateCustomStart = (e: React.ChangeEvent<HTMLInputElement>): void => {
         // revert start time to last valid entry after delay
         window.clearTimeout(revertTimerRef.current)
         revertTimerRef.current = window.setTimeout(revertInvalid, 3000)
@@ -53,7 +53,7 @@ const StartInput: FC<StartInputProps> = props => {
         }
     }
 
-    const revertInvalid = () => {
+    const revertInvalid = (): void => {
         if (inputRef.current) {
             inputRef.current.value = lastValidRef.current
         }

@@ -19,7 +19,7 @@ const App: FC<AppProps> = props => {
     const [minTime, setMinTime] = useState<Date>(getPrevWeek(new Date()))
     const [loaded, setLoaded] = useState<boolean>(false)
 
-    const getEntries = async () => {
+    const getEntries = async (): Promise<void> => {
         const res = await fetch('/api/get-entries', postBody({
             userEmail: props.userEmail,
             minTime,
@@ -38,7 +38,7 @@ const App: FC<AppProps> = props => {
         setLoaded(true)
     }
 
-    const deleteEntries = async (ids: Array<string>) => {
+    const deleteEntries = async (ids: Array<string>): Promise<void> => {
         const res = await fetch('/api/delete-entries', postBody({ ids }))
         await handleEntryResponse(res) // no return value
         // remove deleted entries on success

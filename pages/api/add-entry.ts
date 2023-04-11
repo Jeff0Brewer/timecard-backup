@@ -3,7 +3,10 @@ import type { EntryData, EntryResponse } from '@/lib/types'
 import prisma from '@/prisma/client'
 import { hasSession, isPost, hasEntry } from '@/lib/api'
 
-const addEntry = async (req: NextApiRequest, res: NextApiResponse<EntryResponse>) => {
+const addEntry = async (
+    req: NextApiRequest,
+    res: NextApiResponse<EntryResponse>
+): Promise<void> => {
     if (!(await hasSession(req, res))) {
         // require current session
         return

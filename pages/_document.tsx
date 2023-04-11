@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
 import { Html, Head, Main, NextScript } from 'next/document'
 
-export default function Document () {
+export default function Document (): ReactElement {
     return (
         <Html lang="en">
             <Head />

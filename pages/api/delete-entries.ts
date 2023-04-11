@@ -3,7 +3,10 @@ import type { EntryResponse } from '@/lib/types'
 import prisma from '@/prisma/client'
 import { hasSession, hasIds, isPost } from '@/lib/api'
 
-const deleteEntries = async (req: NextApiRequest, res: NextApiResponse<EntryResponse>) => {
+const deleteEntries = async (
+    req: NextApiRequest,
+    res: NextApiResponse<EntryResponse>
+): Promise<void> => {
     if (!(await hasSession(req, res))) {
         // require current session
         return

@@ -3,7 +3,10 @@ import type { EntryData, EntryResponse } from '@/lib/types'
 import prisma from '@/prisma/client'
 import { hasSession, isPost, hasEmail, hasTimeBounds } from '@/lib/api'
 
-const getEntries = async (req: NextApiRequest, res: NextApiResponse<EntryResponse>) => {
+const getEntries = async (
+    req: NextApiRequest,
+    res: NextApiResponse<EntryResponse>
+): Promise<void> => {
     if (!(await hasSession(req, res))) {
         // require current session
         return
