@@ -13,7 +13,7 @@ type EntryData = {
 
 type EntryResponse = { data: Array<EntryData> } | { message: string }
 
-const isEntryData = (x: any) => {
+const isEntryData = (x: any): boolean => {
     return (
         // allow dates as Date obj or string for json compatibility
         (x?.date instanceof Date || typeof x?.date === 'string') &&
@@ -22,13 +22,12 @@ const isEntryData = (x: any) => {
     )
 }
 
-const newEntryData = () => {
-    const entry: EntryData = {
+const newEntryData = (): EntryData => {
+    return {
         date: new Date(),
         clockIn: false,
         userEmail: ''
     }
-    return entry
 }
 
 export {

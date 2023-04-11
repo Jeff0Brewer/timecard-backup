@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react'
 import type { EntryData } from '@/lib/types'
-import { getHourString } from '@/lib/date-util'
+import { formatHours } from '@/lib/date'
 import Loader from '@/components/loader'
 import placeholder from '@/styles/Placeholder.module.css'
 
@@ -19,7 +19,7 @@ const HourView: FC<HourViewProps> = props => {
             const t0 = props.entries[i].date.getTime()
             total += (t1 - t0) * MS_TO_HR
         }
-        setTotal(getHourString(total))
+        setTotal(formatHours(total))
     }, [props.entries])
 
     return (

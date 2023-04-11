@@ -1,14 +1,14 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
 import Head from 'next/head'
 import { useSession, signOut } from 'next-auth/react'
 import SignIn from '@/components/sign-in'
 import App from '@/components/app'
 import styles from '@/styles/Home.module.css'
 
-export default function Home () {
+export default function Home (): ReactElement {
     const { data: session, status } = useSession()
 
-    const renderFromStatus = (status: string) => {
+    const renderFromStatus = (status: string): ReactElement => {
         switch (status) {
             case 'loading':
                 return <div className={styles.loading}></div>
@@ -23,12 +23,13 @@ export default function Home () {
                 return (
                     <div>
                         <App userEmail={session.user.email} />
-                        <button className={styles.signOut} onClick={() => signOut()}>
+                        <button className={styles.signOut} onClick={(): void => { signOut() }}>
                             log out
                         </button>
                     </div>
                 )
         }
+        throw new Error('Session status type unknown')
     }
 
     return (

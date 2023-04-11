@@ -1,7 +1,7 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useState, ReactElement } from 'react'
 import { RiDeleteBackFill } from 'react-icons/ri'
 import type { EntryData } from '@/lib/types'
-import { getDateStringMed, getTimeStringShort, getHourString, MS_TO_HR } from '@/lib/date-util'
+import { formatMed, formatTimeShort, formatHours, MS_TO_HR } from '@/lib/date'
 import Loader from '@/components/loader'
 import styles from '@/styles/TableView.module.css'
 import placeholder from '@/styles/Placeholder.module.css'
@@ -13,7 +13,7 @@ type TableViewProps = {
 }
 
 const TableView: FC<TableViewProps> = props => {
-    const getDayRows = () => {
+    const getDayRows = (): Array<ReactElement> => {
         const days = []
         for (let i = 0; i < props.entries.length; i += 2) {
             days.push(
@@ -51,11 +51,11 @@ type DayRowProps = {
 
 const DayRow: FC<DayRowProps> = props => {
     const [deleteVisible, setDeleteVisible] = useState<boolean>(false)
-    const hourDiff = getHourString(
+    const hourDiff = formatHours(
         (props.out.date.getTime() - props.in.date.getTime()) * MS_TO_HR
     )
 
-    const deleteSelf = () => {
+    const deleteSelf = (): void => {
         const ids = []
         if (props.in?.id) ids.push(props.in.id)
         if (props.out?.id) ids.push(props.out.id)
@@ -65,14 +65,14 @@ const DayRow: FC<DayRowProps> = props => {
     return (
         <span
             className={styles.row}
-            onClick={() => setDeleteVisible(true)}
-            onMouseEnter={() => setDeleteVisible(true)}
-            onMouseLeave={() => setDeleteVisible(false)}
+            onClick={(): void => setDeleteVisible(true)}
+            onMouseEnter={(): void => setDeleteVisible(true)}
+            onMouseLeave={(): void => setDeleteVisible(false)}
         >
             <div>
-                <p className={styles.day}>{getDateStringMed(props.in.date)}</p>
-                <p className={styles.in}>{getTimeStringShort(props.in.date)}</p>
-                <p className={styles.out}>{getTimeStringShort(props.out.date)}</p>
+                <p className={styles.day}>{formatMed(props.in.date)}</p>
+                <p className={styles.in}>{formatTimeShort(props.in.date)}</p>
+                <p className={styles.out}>{formatTimeShort(props.out.date)}</p>
             </div>
             <div>
                 <p className={styles.total}>{hourDiff}</p>
