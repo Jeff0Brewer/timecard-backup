@@ -9,16 +9,6 @@
         "plugin:@typescript-eslint/recommended",
         "standard"
     ],
-    "overrides": [
-        {
-            "files": [
-                "__tests__/*"
-            ],
-            "env": {
-                "jest": true
-            }
-        }
-    ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": "latest",
@@ -32,7 +22,8 @@
         "react/prop-types": "off",
         "indent": ["error", 4, { "SwitchCase": 1 }],
         "no-var": 0,
-        "@typescript-eslint/no-explicit-any": 0
+        "@typescript-eslint/no-explicit-any": 0,
+        "@typescript-eslint/explicit-function-return-type": "error"
     },
     "settings": {
         "react": {
@@ -40,7 +31,7 @@
         },
         "import/resolver": {
             "node": {
-                "extensions": [".js", ".jsx", ".ts", ".tsx"]
+                "extensions": [".ts", ".tsx"]
             }
         }
     }
