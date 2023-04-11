@@ -12,25 +12,41 @@ const hasSession = async (req: NextApiRequest, res: NextApiResponse<EntryRespons
     return true
 }
 
+const isPost = (req: NextApiRequest, res: NextApiResponse<EntryResponse>): boolean => {
+    if (req.method !== 'POST') {
+        res.status(405).json({ message: 'Must use POST request' })
+        return false
+    }
+    return true
+}
+
 const hasEmail = (req: NextApiRequest, res: NextApiResponse<EntryResponse>): boolean => {
-    if (req.method !== 'POST' || typeof req.body?.userEmail !== 'string') {
-        res.status(405).json({ message: 'Must send userEmail in POST body' })
+    if (typeof req.body?.userEmail !== 'string') {
+        res.status(405).json({ message: 'Must send user email' })
+        return false
+    }
+    return true
+}
+
+const hasTimeBounds = (req: NextApiRequest, res: NextApiResponse<EntryResponse>): boolean => {
+    if (typeof req.body?.minTime !== 'string' || typeof req.body?.maxTime !== 'string') {
+        res.status(405).json({ message: 'Must send time bounds' })
         return false
     }
     return true
 }
 
 const hasEntry = (req: NextApiRequest, res: NextApiResponse<EntryResponse>): boolean => {
-    if (req.method !== 'POST' || !isEntryData(req.body)) {
-        res.status(405).json({ message: 'Must send entry in POST body' })
+    if (!isEntryData(req.body)) {
+        res.status(405).json({ message: 'Must send entry data' })
         return false
     }
     return true
 }
 
 const hasIds = (req: NextApiRequest, res: NextApiResponse<EntryResponse>): boolean => {
-    if (req.method !== 'POST' || !Array.isArray(req.body?.ids)) {
-        res.status(405).json({ message: 'Must send id array in POST body' })
+    if (!Array.isArray(req.body?.ids)) {
+        res.status(405).json({ message: 'Must send id array' })
         return false
     }
     return true
@@ -38,7 +54,9 @@ const hasIds = (req: NextApiRequest, res: NextApiResponse<EntryResponse>): boole
 
 export {
     hasSession,
+    isPost,
     hasEmail,
+    hasTimeBounds,
     hasEntry,
     hasIds
 }
