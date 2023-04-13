@@ -3,6 +3,7 @@ import type { EntryData, CustomStart } from '@/lib/types'
 import { formatLong, fromCustom } from '@/lib/date'
 import { postBody, handleEntryResponse } from '@/lib/api'
 import StartTime from '@/components/start-time'
+import JobLabel from '@/components/job-label'
 import Loader from '@/components/loader'
 import styles from '@/styles/Clock.module.css'
 import placeholder from '@/styles/Placeholder.module.css'
@@ -16,6 +17,7 @@ const ClockIn: FC<ClockInProps> = props => {
     const [displayTime, setDisplayTime] = useState<Date>(new Date())
     const [lastEntry, setLastEntry] = useState<EntryData | null>(null)
     const [customStart, setCustomStart] = useState<CustomStart | null>(null)
+    const [jobLabel, setJobLabel] = useState<string>('')
 
     const getLastEntry = async (): Promise<void> => {
         const res = await fetch('/api/get-last-entry', postBody({ userEmail: props.userEmail }))
@@ -71,7 +73,10 @@ const ClockIn: FC<ClockInProps> = props => {
             content={
                 <section className={styles.wrap}>
                     <p className={styles.date}>{formatLong(displayTime)}</p>
-                    <StartTime lastEntry={lastEntry} setCustomStart={setCustomStart} />
+                    <div className={styles.inputs}>
+                        <JobLabel lastEntry={lastEntry} setJobLabel={setJobLabel} />
+                        <StartTime lastEntry={lastEntry} setCustomStart={setCustomStart} />
+                    </div>
                     <button className={styles.clockIn} onClick={clockIn}>Clock {lastEntry?.clockIn ? 'Out' : 'In'}</button>
                 </section>
             }

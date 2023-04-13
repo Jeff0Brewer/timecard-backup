@@ -14,12 +14,18 @@
     width: 90%;
 }
 
-.startTime {
+.inputs {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.startTime, .jobLabel {
     display: flex;
     align-items: center;
 }
 
-.startTime, .startTimePlaceholder {
+.startTime, .jobLabel, .startTimePlaceholder {
     font-size: 18px;
     margin: 15px;
 }
