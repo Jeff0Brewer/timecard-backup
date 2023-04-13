@@ -11,7 +11,16 @@ type EntryData = {
     id?: string
 }
 
-type EntryResponse = { data: Array<EntryData> } | { message: string }
+type JobData = {
+    label: string,
+    userEmail: string
+}
+
+type MessageResponse = { message: string }
+
+type EntryResponse = { data: Array<EntryData> } | MessageResponse
+
+type JobResponse = { data: Array<JobData> } | MessageResponse
 
 const isEntryData = (x: any): boolean => {
     return (
@@ -37,6 +46,8 @@ export {
 
 export type {
     EntryData,
-    CustomStart,
-    EntryResponse
+    JobData,
+    EntryResponse,
+    JobResponse,
+    CustomStart
 }
