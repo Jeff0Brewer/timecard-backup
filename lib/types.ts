@@ -8,6 +8,7 @@ type EntryData = {
     date: Date,
     clockIn: boolean,
     userEmail: string,
+    jobLabel?: string,
     id?: string
 }
 
