@@ -12,13 +12,14 @@ const StartTime: FC<StartTimeProps> = props => {
     return (
         <span className={styles.startTime}>{
             props.lastEntry?.clockIn
-                ? <p>started - {formatTime(props.lastEntry.date)}</p>
-                : <StartInput setCustomStart={props.setCustomStart} />
+                ? <p>began: {formatTime(props.lastEntry.date)}</p>
+                : <StartInput label={'start:'} setCustomStart={props.setCustomStart} />
         }</span>
     )
 }
 
 type StartInputProps = {
+    label: string,
     setCustomStart: (custom: CustomStart) => void
 }
 
@@ -77,7 +78,7 @@ const StartInput: FC<StartInputProps> = props => {
 
     return (
         <>
-            <p>start time:</p>
+            <p>{props.label}</p>
             <input
                 type="text"
                 ref={inputRef}
