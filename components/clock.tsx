@@ -46,7 +46,7 @@ const ClockIn: FC<ClockInProps> = props => {
             clockIn: !lastEntry.clockIn,
             userEmail: props.userEmail
         }
-        const res = await fetch('/api/add-entry', postBody(entry))
+        const res = await fetch('/api/add-entry', postBody({ entry }))
         const entries = await handleEntryResponse(res)
         setLastEntry(entries[0])
         setCustomStart(null)
