@@ -1,6 +1,8 @@
-import React, { FC, useRef, useEffect } from 'react'
+import React, { FC, useRef, useEffect, useState } from 'react'
 import type { EntryData } from '@/lib/types'
+import Loader from '@/components/loader'
 import styles from '@/styles/Clock.module.css'
+import placeholder from '@/styles/Placeholder.module.css'
 
 type JobLabelProps = {
     lastEntry: EntryData | null,
@@ -9,6 +11,8 @@ type JobLabelProps = {
 
 const JobLabel: FC<JobLabelProps> = props => {
     const inputRef = useRef<HTMLInputElement>(null)
+    const [jobs, setJobs] = useState<Array<string>>([])
+    const [loaded, setLoaded] = useState<boolean>(false)
 
     const updateLabel = (e: React.ChangeEvent<HTMLInputElement>): void => {
         // substring label to ceil length
@@ -32,20 +36,32 @@ const JobLabel: FC<JobLabelProps> = props => {
     }
 
     return (
-        <span className={styles.jobLabel}>{
-            props.lastEntry?.clockIn
-                ? <p>job: {props.lastEntry?.jobLabel}</p>
-                : <>
-                    <p>job:</p>
-                    <input
-                        type="text"
-                        placeholder={'none'}
-                        ref={inputRef}
-                        onInput={updateLabel}
-                    />
-                </>
-        }</span>
+        <Loader
+            loaded={loaded}
+            placeholder={PLACEHOLDER}
+            content={
+                <span className={styles.jobLabel}>{
+                    props.lastEntry?.clockIn
+                        ? <p>job: {props.lastEntry?.jobLabel}</p>
+                        : <>
+                            <p>job:</p>
+                            <input
+                                type="text"
+                                placeholder={'none'}
+                                ref={inputRef}
+                                onInput={updateLabel}
+                            />
+                        </>
+                }</span>
+            }
+        />
     )
 }
+
+const PLACEHOLDER = (
+    <span className={`${placeholder.style} ${styles.jobLabel}`}>
+        <p>job</p>
+    </span>
+)
 
 export default JobLabel
