@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react'
-import type { EntryData, CustomStart } from '@/lib/types'
+import type { EntryData, JobData, CustomStart } from '@/lib/types'
 import { formatLong, fromCustom } from '@/lib/date'
-import { postBody, handleEntryResponse } from '@/lib/api'
+import { postBody, handleEntryResponse, handleJobResponse } from '@/lib/api'
 import StartTime from '@/components/start-time'
 import JobLabel from '@/components/job-label'
 import Loader from '@/components/loader'
@@ -17,6 +17,7 @@ const Clock: FC<ClockProps> = props => {
     const [displayTime, setDisplayTime] = useState<Date>(new Date())
     const [lastEntry, setLastEntry] = useState<EntryData | null>(null)
     const [customStart, setCustomStart] = useState<CustomStart | null>(null)
+    const [jobs, setJobs] = useState<Array<string>>([])
     const [jobLabel, setJobLabel] = useState<string>('')
 
     // clock in / out based on current clock state
@@ -32,17 +33,37 @@ const Clock: FC<ClockProps> = props => {
                 date = customDate
             }
         }
+
         // prevent clocking out before clock in time
         if (lastEntry.clockIn && date < lastEntry.date) {
             date = new Date(lastEntry.date.getTime() + 1)
         }
 
-        const entry: EntryData = {
+        // create new job if label doesn't exist
+        if (jobLabel && !jobs.includes(jobLabel)) {
+            createJob({
+                label: jobLabel,
+                userEmail: props.userEmail
+            })
+        }
+
+        // create new entry
+        createEntry({
             date,
             jobLabel,
             clockIn: !lastEntry.clockIn,
             userEmail: props.userEmail
-        }
+        })
+    }
+
+    const createJob = async (job: JobData): Promise<void> => {
+        const res = await fetch('/api/add-job', postBody({ job }))
+        const newJobs = await handleJobResponse(res)
+        const label = newJobs[0].label
+        setJobs([...jobs, label])
+    }
+
+    const createEntry = async (entry: EntryData): Promise<void> => {
         const res = await fetch('/api/add-entry', postBody({ entry }))
         const entries = await handleEntryResponse(res)
         setLastEntry(entries[0])
@@ -70,10 +91,20 @@ const Clock: FC<ClockProps> = props => {
                 <section className={styles.wrap}>
                     <p className={styles.date}>{formatLong(displayTime)}</p>
                     <div className={styles.inputs}>
-                        <JobLabel lastEntry={lastEntry} setJobLabel={setJobLabel} />
-                        <StartTime lastEntry={lastEntry} setCustomStart={setCustomStart} />
+                        <JobLabel
+                            lastEntry={lastEntry}
+                            userEmail={props.userEmail}
+                            setJobs={setJobs}
+                            setJobLabel={setJobLabel}
+                        />
+                        <StartTime
+                            lastEntry={lastEntry}
+                            setCustomStart={setCustomStart}
+                        />
                     </div>
-                    <button className={styles.clockIn} onClick={clockIn}>Clock {lastEntry?.clockIn ? 'Out' : 'In'}</button>
+                    <button className={styles.clockIn} onClick={clockIn}>
+                        Clock {lastEntry?.clockIn ? 'Out' : 'In'}
+                    </button>
                 </section>
             }
         />

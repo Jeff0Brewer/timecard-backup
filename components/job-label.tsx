@@ -1,17 +1,19 @@
 import React, { FC, useRef, useEffect, useState } from 'react'
-import type { EntryData } from '@/lib/types'
+import type { EntryData, JobData } from '@/lib/types'
 import Loader from '@/components/loader'
+import { postBody, handleJobResponse } from '@/lib/api'
 import styles from '@/styles/Clock.module.css'
 import placeholder from '@/styles/Placeholder.module.css'
 
 type JobLabelProps = {
     lastEntry: EntryData | null,
+    userEmail: string,
+    setJobs: (jobs: Array<string>) => void,
     setJobLabel: (label: string) => void
 }
 
 const JobLabel: FC<JobLabelProps> = props => {
     const inputRef = useRef<HTMLInputElement>(null)
-    const [jobs, setJobs] = useState<Array<string>>([])
     const [loaded, setLoaded] = useState<boolean>(false)
 
     const updateLabel = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -19,6 +21,18 @@ const JobLabel: FC<JobLabelProps> = props => {
         const label = e.target.value.slice(0, 20)
         props.setJobLabel(label)
     }
+
+    const getJobs = async (): Promise<void> => {
+        const res = await fetch('/api/get-jobs', postBody({ userEmail: props.userEmail }))
+        const jobs = await handleJobResponse(res)
+        const jobLabels = jobs.map((job: JobData) => job.label)
+        props.setJobs(jobLabels)
+        setLoaded(true)
+    }
+
+    useEffect(() => {
+        getJobs()
+    }, [])
 
     // default to label of last entry
     useEffect(() => {
