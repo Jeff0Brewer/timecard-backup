@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/react'
-import type { EntryData, EntryResponse } from '@/lib/types'
+import type { EntryData, EntryResponse, JobData, JobResponse } from '@/lib/types'
 
 const hasSession = async (req: NextApiRequest, res: NextApiResponse): Promise<boolean> => {
     const session = await getSession({ req })
@@ -33,15 +33,18 @@ const postBody = (data: object): PostBody => {
     }
 }
 
-const handleEntryResponse = async (res: Response): Promise<Array<EntryData>> => {
-    const entryResponse: EntryResponse = await res.json()
-    // check and log errors
+// get data from response, log error messages
+const checkResponseError = async (res: Response): Promise<any> => {
+    const data = await res.json()
     if (!res.ok) {
-        const message = 'message' in entryResponse
-            ? entryResponse.message
-            : 'failed'
-        throw new Error(`Api Error ${res.status}: ${message}`)
+        const message = 'message' in data ? data.message : 'failed'
+        throw new Error(`Error ${res.status}: ${message}`)
     }
+    return data
+}
+
+const handleEntryResponse = async (res: Response): Promise<Array<EntryData>> => {
+    const entryResponse: EntryResponse = await checkResponseError(res)
     // return empty list of entries if success and message
     if ('message' in entryResponse) {
         return []
@@ -53,9 +56,18 @@ const handleEntryResponse = async (res: Response): Promise<Array<EntryData>> => 
     })
 }
 
+const handleJobResponse = async (res: Response): Promise<Array<JobData>> => {
+    const jobResponse: JobResponse = await checkResponseError(res)
+    if ('message' in jobResponse) {
+        return []
+    }
+    return jobResponse.data
+}
+
 export {
     hasSession,
     hasFields,
     handleEntryResponse,
+    handleJobResponse,
     postBody
 }
