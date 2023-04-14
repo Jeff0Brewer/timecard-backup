@@ -17,7 +17,7 @@
 .inputs {
     display: flex;
     width: 100%;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 .startTime, .jobLabel {
@@ -25,13 +25,13 @@
     align-items: center;
 }
 
-.startTime, .jobLabel, .startTimePlaceholder {
+.startTime, .jobLabel, .startTimePlaceholder, .jobLabelPlaceholder {
     font-size: 18px;
     margin: 15px;
 }
 
-.startTimePlaceholder {
-    width: 50%;
+.startTimePlaceholder, .jobLabelPlaceholder {
+    width: 35%;
 }
 
 .startInput {

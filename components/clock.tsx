@@ -39,6 +39,7 @@ const Clock: FC<ClockProps> = props => {
 
         const entry: EntryData = {
             date,
+            jobLabel,
             clockIn: !lastEntry.clockIn,
             userEmail: props.userEmail
         }
@@ -62,14 +63,9 @@ const Clock: FC<ClockProps> = props => {
     }, [])
 
     return (
-        <Loader loaded={!!lastEntry}
-            placeholder={
-                <section className={styles.wrap}>
-                    <p className={`${placeholder.style} ${styles.datePlaceholder}`}>date</p>
-                    <p className={`${placeholder.style} ${styles.startTimePlaceholder}`}>start</p>
-                    <div className={`${placeholder.style} ${styles.clockInPlaceholder}`}>clockin</div>
-                </section>
-            }
+        <Loader
+            loaded={!!lastEntry}
+            placeholder={PLACEHOLDER}
             content={
                 <section className={styles.wrap}>
                     <p className={styles.date}>{formatLong(displayTime)}</p>
@@ -83,5 +79,16 @@ const Clock: FC<ClockProps> = props => {
         />
     )
 }
+
+const PLACEHOLDER = (
+    <section className={styles.wrap}>
+        <p className={`${placeholder.style} ${styles.datePlaceholder}`}>date</p>
+        <div className={styles.inputs}>
+            <p className={`${placeholder.style} ${styles.startTimePlaceholder}`}>start</p>
+            <p className={`${placeholder.style} ${styles.jobLabelPlaceholder}`}>job</p>
+        </div>
+        <div className={`${placeholder.style} ${styles.clockInPlaceholder}`}>clockin</div>
+    </section>
+)
 
 export default Clock
