@@ -8,22 +8,16 @@ import Loader from '@/components/loader'
 import styles from '@/styles/Clock.module.css'
 import placeholder from '@/styles/Placeholder.module.css'
 
-type ClockInProps = {
+type ClockProps = {
     userEmail: string,
     updateTimecard: () => void
 }
 
-const ClockIn: FC<ClockInProps> = props => {
+const Clock: FC<ClockProps> = props => {
     const [displayTime, setDisplayTime] = useState<Date>(new Date())
     const [lastEntry, setLastEntry] = useState<EntryData | null>(null)
     const [customStart, setCustomStart] = useState<CustomStart | null>(null)
     const [jobLabel, setJobLabel] = useState<string>('')
-
-    const getLastEntry = async (): Promise<void> => {
-        const res = await fetch('/api/get-last-entry', postBody({ userEmail: props.userEmail }))
-        const entries = await handleEntryResponse(res)
-        setLastEntry(entries[0])
-    }
 
     // clock in / out based on current clock state
     const clockIn = async (): Promise<void> => {
@@ -55,6 +49,12 @@ const ClockIn: FC<ClockInProps> = props => {
         props.updateTimecard()
     }
 
+    const getLastEntry = async (): Promise<void> => {
+        const res = await fetch('/api/get-last-entry', postBody({ userEmail: props.userEmail }))
+        const entries = await handleEntryResponse(res)
+        setLastEntry(entries[0])
+    }
+
     useEffect(() => {
         getLastEntry()
         const intervalId = window.setInterval(() => setDisplayTime(new Date()), 5000)
@@ -84,4 +84,4 @@ const ClockIn: FC<ClockInProps> = props => {
     )
 }
 
-export default ClockIn
+export default Clock
