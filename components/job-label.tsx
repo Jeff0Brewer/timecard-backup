@@ -65,10 +65,10 @@ const JobLabel: FC<JobLabelProps> = props => {
             tabIndex={-1}
             onBlur={closeOnBlur}
         >
-            <label>job name</label>
+            <label>job title</label>
             <input
                 type="text"
-                placeholder={'none'}
+                placeholder={'Untitled'}
                 ref={inputRef}
                 onInput={inputLabel}
                 onClick={(): void => { setOpen(true) }}

@@ -79,10 +79,14 @@
     border-radius: 0 0 var(--border-rad) var(--border-rad);
     overflow: hidden;
     background-color: #111;
-    padding: 0 10px;
 }
 
 .dropList a {
     line-height: 35px;
+    padding: 0 10px;
     border-top: 1px solid #333;
+}
+
+.dropList a:hover {
+    background-color: #222;
 }
