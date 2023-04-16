@@ -41,10 +41,13 @@
     margin: 10px;
 }
 
+.clockIn, .inputs {
+    max-width: 400px;
+}
+
 .labeledInput {
     position: relative;
     width: calc(50% - 5px);
-    max-width: 200px;
 }
 
 .labeledInput label {
