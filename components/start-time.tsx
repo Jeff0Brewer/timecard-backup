@@ -9,21 +9,6 @@ type StartTimeProps = {
 }
 
 const StartTime: FC<StartTimeProps> = props => {
-    return (
-        <span className={styles.startTime}>{
-            props.lastEntry?.clockIn
-                ? <p>began: {formatTime(props.lastEntry.date)}</p>
-                : <StartInput label={'start:'} setCustomStart={props.setCustomStart} />
-        }</span>
-    )
-}
-
-type StartInputProps = {
-    label: string,
-    setCustomStart: (custom: CustomStart) => void
-}
-
-const StartInput: FC<StartInputProps> = props => {
     const inputRef = useRef<HTMLInputElement>(null)
     const lastValidRef = useRef<string>(formatTime(new Date()))
     const revertTimerRef = useRef<number>(-1)
@@ -61,32 +46,37 @@ const StartInput: FC<StartInputProps> = props => {
     }
 
     useEffect(() => {
-        // start interval to update start time value to curr time until custom entered
-        updateIntervalRef.current = window.setInterval(() => {
-            // only update if input element doesn't have focus
-            if (inputRef.current && document.activeElement !== inputRef.current) {
-                const time = formatTime(new Date())
-                inputRef.current.value = time
-                lastValidRef.current = time
+        // update start time to current when clocking in
+        if (!props.lastEntry?.clockIn) {
+            if (inputRef.current) {
+                inputRef.current.value = formatTime(new Date())
             }
-        }, 5000)
+            // start interval to update curr time until custom entered
+            updateIntervalRef.current = window.setInterval(() => {
+                // only update if input element doesn't have focus
+                if (inputRef.current && document.activeElement !== inputRef.current) {
+                    const time = formatTime(new Date())
+                    inputRef.current.value = time
+                    lastValidRef.current = time
+                }
+            }, 5000)
+        }
         return () => {
             window.clearTimeout(revertTimerRef.current)
             window.clearInterval(updateIntervalRef.current)
         }
-    }, [])
+    }, [props.lastEntry])
 
     return (
-        <>
-            <p>{props.label}</p>
+        <div className={styles.labeledInput}>
+            <label>start time</label>
             <input
-                type="text"
                 ref={inputRef}
-                className={styles.startInput}
-                onInput={updateCustomStart}
+                type="text"
                 defaultValue={lastValidRef.current}
+                onInput={updateCustomStart}
             />
-        </>
+        </div>
     )
 }
 

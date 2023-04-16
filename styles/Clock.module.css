@@ -18,6 +18,24 @@
     display: flex;
     width: 100%;
     justify-content: space-around;
+    margin: 10px;
+}
+
+.labeledInput {
+    display: flex;
+    flex-direction: column;
+    width: 140px;
+    padding: 10px;
+    background-color: #111;
+    border-radius: var(--border-rad);
+}
+
+.labeledInput label {
+    font-size: 14px;
+}
+
+.labeledInput input {
+    font-size: 18px;
 }
 
 .startTime, .jobLabel {
