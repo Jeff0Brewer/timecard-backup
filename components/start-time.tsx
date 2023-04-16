@@ -27,20 +27,21 @@ const StartTime: FC<StartTimeProps> = props => {
         // parse hour, minute, am/pm from text input
         const str = e.target.value.toLowerCase()
         const match = str.match(/(\d{1,2}):(\d{2}) ?([ap]m)/)
-        if (match && match.length === 4) {
-            const hour = parseInt(match[1])
-            const minute = parseInt(match[2]) // trailing non-numeric chars ignored
-            const ampm = match[3]
-            if (
-                hour >= 0 && hour <= 12 &&
-                minute >= 0 && minute <= 60
-            ) {
-                const custom = fromHourMinuteAmPm(hour, minute, ampm)
-                lastValidRef.current = formatTime(custom)
-                props.setCustomStart(custom)
-                // stop start time updates since custom entered
-                setUpdateTime(false)
-            }
+        if (!match || match.length !== 4) { return }
+        const hour = parseInt(match[1])
+        const minute = parseInt(match[2]) // trailing non-numeric chars ignored
+        const ampm = match[3]
+
+        // set date from matched values
+        if (
+            hour >= 0 && hour <= 12 &&
+            minute >= 0 && minute <= 60
+        ) {
+            const custom = fromHourMinuteAmPm(hour, minute, ampm)
+            lastValidRef.current = formatTime(custom)
+            props.setCustomStart(custom)
+            // stop start time updates since custom entered
+            setUpdateTime(false)
         }
     }
 
@@ -52,7 +53,7 @@ const StartTime: FC<StartTimeProps> = props => {
     }, [])
 
     useEffect(() => {
-        // update start time when
+        // update start time when last entry is clock out
         setUpdateTime(!props.lastEntry?.clockIn)
     }, [props.lastEntry])
 
