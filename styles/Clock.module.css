@@ -15,27 +15,30 @@
 }
 
 .inputs {
+    position: relative;
     display: flex;
     width: 100%;
-    justify-content: space-around;
+    justify-content: space-between;
     margin: 10px;
 }
 
 .labeledInput {
+    width: calc(50% - 5px);
     display: flex;
     flex-direction: column;
-    width: 140px;
     padding: 10px;
     background-color: #111;
     border-radius: var(--border-rad);
 }
 
 .labeledInput label {
-    font-size: 14px;
+    font-size: 12px;
+    text-transform: capitalize;
 }
 
 .labeledInput input {
-    font-size: 18px;
+    font-size: 16px;
+    line-height: 24px;
 }
 
 .startTime, .jobLabel {

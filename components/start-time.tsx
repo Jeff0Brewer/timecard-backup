@@ -69,8 +69,9 @@ const StartTime: FC<StartTimeProps> = props => {
 
     return (
         <div className={styles.labeledInput}>
-            <label>start time</label>
+            <label htmlFor="input">start time</label>
             <input
+                id="input"
                 ref={inputRef}
                 type="text"
                 defaultValue={lastValidRef.current}

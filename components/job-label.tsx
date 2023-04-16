@@ -1,9 +1,7 @@
-import React, { FC, useRef, useEffect, useState } from 'react'
+import React, { FC, useRef, useEffect } from 'react'
 import type { EntryData, JobData } from '@/lib/types'
-import Loader from '@/components/loader'
 import { postBody, handleJobResponse } from '@/lib/api'
 import styles from '@/styles/Clock.module.css'
-import placeholder from '@/styles/Placeholder.module.css'
 
 type JobLabelProps = {
     lastEntry: EntryData | null,
@@ -14,7 +12,6 @@ type JobLabelProps = {
 
 const JobLabel: FC<JobLabelProps> = props => {
     const inputRef = useRef<HTMLInputElement>(null)
-    const [loaded, setLoaded] = useState<boolean>(false)
 
     const updateLabel = (e: React.ChangeEvent<HTMLInputElement>): void => {
         // substring label to ceil length
@@ -27,7 +24,6 @@ const JobLabel: FC<JobLabelProps> = props => {
         const jobs = await handleJobResponse(res)
         const jobLabels = jobs.map((job: JobData) => job.label)
         props.setJobs(jobLabels)
-        setLoaded(true)
     }
 
     useEffect(() => {
@@ -50,32 +46,16 @@ const JobLabel: FC<JobLabelProps> = props => {
     }
 
     return (
-        <Loader
-            loaded={loaded}
-            placeholder={PLACEHOLDER}
-            content={
-                <span className={styles.jobLabel}>{
-                    props.lastEntry?.clockIn
-                        ? <p>job: {props.lastEntry?.jobLabel}</p>
-                        : <>
-                            <p>job:</p>
-                            <input
-                                type="text"
-                                placeholder={'none'}
-                                ref={inputRef}
-                                onInput={updateLabel}
-                            />
-                        </>
-                }</span>
-            }
-        />
+        <div className={styles.labeledInput}>
+            <label>job name</label>
+            <input
+                type="text"
+                placeholder={'none'}
+                ref={inputRef}
+                onInput={updateLabel}
+            />
+        </div>
     )
 }
-
-const PLACEHOLDER = (
-    <span className={`${placeholder.style} ${styles.jobLabel}`}>
-        <p>job</p>
-    </span>
-)
 
 export default JobLabel
