@@ -14,37 +14,6 @@
     width: 90%;
 }
 
-.inputs {
-    position: relative;
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
-    margin: 10px;
-}
-
-.labeledInput {
-    width: calc(50% - 5px);
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    background-color: #111;
-    border-radius: var(--border-rad);
-}
-
-.labeledInput * {
-    text-align: center;
-}
-
-.labeledInput label {
-    font-size: 12px;
-    text-transform: capitalize;
-}
-
-.labeledInput input {
-    font-size: 16px;
-    line-height: 20px;
-}
-
 .clockIn {
     color: #000;
     border-radius: var(--border-rad);
@@ -61,4 +30,58 @@
 
 .clockIn:hover {
     background-color: #fff;
+}
+
+.inputs {
+    position: relative;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin: 10px;
+}
+
+.labeledInput {
+    position: relative;
+    width: calc(50% - 5px);
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    background-color: #111;
+    border-radius: var(--border-rad);
+}
+
+.labeledInput label input {
+    text-align: center;
+}
+
+.labeledInput label {
+    font-size: 12px;
+    text-transform: capitalize;
+}
+
+.labeledInput input {
+    font-size: 16px;
+    line-height: 20px;
+}
+
+.dropWrap {
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    right: 0;
+    height: 0;
+}
+
+.dropList {
+    display: flex;
+    flex-direction: column;
+    border-radius: 0 0 var(--border-rad) var(--border-rad);
+    overflow: hidden;
+    background-color: #111;
+    padding: 0 10px;
+}
+
+.dropList a {
+    line-height: 35px;
+    border-top: 1px solid #333;
 }

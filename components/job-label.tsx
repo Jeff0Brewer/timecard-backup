@@ -1,4 +1,4 @@
-import React, { FC, useRef, useEffect } from 'react'
+import React, { FC, useRef, useEffect, useState } from 'react'
 import type { EntryData, JobData } from '@/lib/types'
 import { postBody, handleJobResponse } from '@/lib/api'
 import styles from '@/styles/Clock.module.css'
@@ -6,24 +6,37 @@ import styles from '@/styles/Clock.module.css'
 type JobLabelProps = {
     lastEntry: EntryData | null,
     userEmail: string,
+    jobs: Array<string>,
     setJobs: (jobs: Array<string>) => void,
     setJobLabel: (label: string) => void
 }
 
 const JobLabel: FC<JobLabelProps> = props => {
+    const [open, setOpen] = useState<boolean>(false)
     const inputRef = useRef<HTMLInputElement>(null)
-
-    const updateLabel = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        // substring label to ceil length
-        const label = e.target.value.slice(0, 20)
-        props.setJobLabel(label)
-    }
 
     const getJobs = async (): Promise<void> => {
         const res = await fetch('/api/get-jobs', postBody({ userEmail: props.userEmail }))
         const jobs = await handleJobResponse(res)
         const jobLabels = jobs.map((job: JobData) => job.label)
         props.setJobs(jobLabels)
+    }
+
+    const closeOnBlur = (e: React.FocusEvent<HTMLDivElement>): void => {
+        if (!e.currentTarget.contains(e.relatedTarget)) {
+            setOpen(false)
+        }
+    }
+
+    const inputLabel = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        props.setJobLabel(e.target.value)
+    }
+
+    const selectLabel = (label: string): void => {
+        props.setJobLabel(label)
+        if (inputRef.current) {
+            inputRef.current.value = label
+        }
     }
 
     useEffect(() => {
@@ -46,14 +59,30 @@ const JobLabel: FC<JobLabelProps> = props => {
     }
 
     return (
-        <div className={styles.labeledInput}>
+        <div
+            className={styles.labeledInput}
+            tabIndex={-1}
+            onBlur={closeOnBlur}
+            onClick={(): void => { setOpen(true) }}
+        >
             <label>job name</label>
             <input
                 type="text"
                 placeholder={'none'}
                 ref={inputRef}
-                onInput={updateLabel}
+                onInput={inputLabel}
             />
+            { !open || <div className={styles.dropWrap}>
+                <div className={styles.dropList}>{
+                    props.jobs.map((job: string, i: number) =>
+                        <a
+                            key={i}
+                            onClick={(): void => { selectLabel(job) }}>
+                            {job}
+                        </a>
+                    )
+                }</div>
+            </div>}
         </div>
     )
 }

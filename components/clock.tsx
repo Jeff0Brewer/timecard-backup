@@ -94,6 +94,7 @@ const Clock: FC<ClockProps> = props => {
                         <JobLabel
                             lastEntry={lastEntry}
                             userEmail={props.userEmail}
+                            jobs={jobs}
                             setJobs={setJobs}
                             setJobLabel={setJobLabel}
                         />
