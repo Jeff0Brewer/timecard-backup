@@ -42,27 +42,7 @@
 
 .labeledInput input {
     font-size: 16px;
-    line-height: 24px;
-}
-
-.startTime, .jobLabel {
-    display: flex;
-    align-items: center;
-}
-
-.startTime, .jobLabel, .startTimePlaceholder, .jobLabelPlaceholder {
-    font-size: 18px;
-    margin: 15px;
-}
-
-.startTimePlaceholder, .jobLabelPlaceholder {
-    width: 35%;
-}
-
-.startInput {
-    width: 80px;
-    font-size: inherit;
-    text-align: right;
+    line-height: 20px;
 }
 
 .clockIn {

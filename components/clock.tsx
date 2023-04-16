@@ -115,8 +115,14 @@ const PLACEHOLDER = (
     <section className={styles.wrap}>
         <p className={`${placeholder.style} ${styles.datePlaceholder}`}>date</p>
         <div className={styles.inputs}>
-            <p className={`${placeholder.style} ${styles.startTimePlaceholder}`}>start</p>
-            <p className={`${placeholder.style} ${styles.jobLabelPlaceholder}`}>job</p>
+            <div className={`${placeholder.style} ${styles.labeledInput}`}>
+                <label>a</label>
+                <input type="text" />
+            </div>
+            <div className={`${placeholder.style} ${styles.labeledInput}`}>
+                <label>b</label>
+                <input type="text" />
+            </div>
         </div>
         <div className={`${placeholder.style} ${styles.clockInPlaceholder}`}>clockin</div>
     </section>
