@@ -1,9 +1,3 @@
-type CustomStart = {
-    hour: number,
-    minute: number,
-    ampm: string
-}
-
 type EntryData = {
     date: Date,
     clockIn: boolean,
@@ -49,6 +43,5 @@ export type {
     EntryData,
     JobData,
     EntryResponse,
-    JobResponse,
-    CustomStart
+    JobResponse
 }

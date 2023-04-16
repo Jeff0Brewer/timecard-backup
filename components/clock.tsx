@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react'
-import type { EntryData, JobData, CustomStart } from '@/lib/types'
-import { formatLong, fromCustom } from '@/lib/date'
+import type { EntryData, JobData } from '@/lib/types'
+import { formatLong } from '@/lib/date'
 import { postBody, handleEntryResponse, handleJobResponse } from '@/lib/api'
 import StartTime from '@/components/start-time'
 import JobLabel from '@/components/job-label'
@@ -16,7 +16,7 @@ type ClockProps = {
 const Clock: FC<ClockProps> = props => {
     const [displayTime, setDisplayTime] = useState<Date>(new Date())
     const [lastEntry, setLastEntry] = useState<EntryData | null>(null)
-    const [customStart, setCustomStart] = useState<CustomStart | null>(null)
+    const [customStart, setCustomStart] = useState<Date | null>(null)
     const [jobs, setJobs] = useState<Array<string>>([])
     const [jobLabel, setJobLabel] = useState<string>('')
 
@@ -27,11 +27,11 @@ const Clock: FC<ClockProps> = props => {
 
         let date: Date = new Date()
         // use custom start time if valid date provided
-        if (!lastEntry.clockIn && customStart) {
-            const customDate = fromCustom(customStart)
-            if (customDate > date && customDate > lastEntry.date) {
-                date = customDate
-            }
+        if (
+            !lastEntry.clockIn && customStart &&
+            customStart > date && customStart < lastEntry.date
+        ) {
+            date = customStart
         }
 
         // prevent clocking out before clock in time
