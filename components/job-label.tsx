@@ -37,6 +37,7 @@ const JobLabel: FC<JobLabelProps> = props => {
         if (inputRef.current) {
             inputRef.current.value = label
         }
+        setOpen(false)
     }
 
     useEffect(() => {
@@ -63,7 +64,6 @@ const JobLabel: FC<JobLabelProps> = props => {
             className={styles.labeledInput}
             tabIndex={-1}
             onBlur={closeOnBlur}
-            onClick={(): void => { setOpen(true) }}
         >
             <label>job name</label>
             <input
@@ -71,6 +71,7 @@ const JobLabel: FC<JobLabelProps> = props => {
                 placeholder={'none'}
                 ref={inputRef}
                 onInput={inputLabel}
+                onClick={(): void => { setOpen(true) }}
             />
             { !open || <div className={styles.dropWrap}>
                 <div className={styles.dropList}>{
