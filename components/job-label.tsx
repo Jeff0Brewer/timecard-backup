@@ -61,7 +61,7 @@ const JobLabel: FC<JobLabelProps> = props => {
 
     return (
         <div
-            className={styles.labeledInput}
+            className={`${styles.labeledInput} ${props.lastEntry?.clockIn ? styles.inactive : ''}`}
             tabIndex={-1}
             onBlur={closeOnBlur}
         >

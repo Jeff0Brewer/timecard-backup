@@ -68,7 +68,7 @@ const StartTime: FC<StartTimeProps> = props => {
     }, [props.lastEntry])
 
     return (
-        <div className={styles.labeledInput}>
+        <div className={`${styles.labeledInput} ${props.lastEntry?.clockIn ? styles.inactive : ''}`}>
             <label htmlFor="input">start time</label>
             <input
                 id="input"
