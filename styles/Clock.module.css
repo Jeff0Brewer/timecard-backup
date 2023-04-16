@@ -43,11 +43,6 @@
 .labeledInput {
     position: relative;
     width: calc(50% - 5px);
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    background-color: #111;
-    border-radius: var(--border-rad);
 }
 
 .labeledInput label input {
@@ -55,21 +50,27 @@
 }
 
 .labeledInput label {
+    position: absolute;
+    top: 10px;
+    left: 10px;
     font-size: 12px;
     text-transform: capitalize;
 }
 
 .labeledInput input {
+    width: 100%;
     font-size: 16px;
     line-height: 20px;
+    background-color: #111;
+    border-radius: var(--border-rad);
+    padding: 25px 10px 10px 10px;
 }
 
 .dropWrap {
     position: absolute;
     bottom: 5px;
-    left: 0;
-    right: 0;
     height: 0;
+    width: 100%;
 }
 
 .dropList {
