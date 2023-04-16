@@ -31,6 +31,10 @@
     border-radius: var(--border-rad);
 }
 
+.labeledInput * {
+    text-align: center;
+}
+
 .labeledInput label {
     font-size: 12px;
     text-transform: capitalize;
