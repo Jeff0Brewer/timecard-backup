@@ -2,7 +2,6 @@ import React, { FC, useState, useEffect } from 'react'
 import type { EntryData } from '@/lib/types'
 import Clock from '@/components/clock'
 import DateBounds from '@/components/date-bounds'
-import HourView from '@/components/hour-view'
 import ChartView from '@/components/chart-view'
 import TableView from '@/components/table-view'
 import { getDayEnd, getPrevWeek } from '@/lib/date'
@@ -63,10 +62,6 @@ const App: FC<AppProps> = props => {
                     setMin={setMinTime}
                     max={maxTime}
                     setMax={setMaxTime}
-                    loaded={loaded}
-                />
-                <HourView
-                    entries={visibleEntries}
                     loaded={loaded}
                 />
             </span>
