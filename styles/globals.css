@@ -2,6 +2,7 @@
 
 :root {
     --accent-color: #fcd37a;
+    --border-color: #333;
     --border-rad: 4px;
     --hover-opacity: .7;
     --max-width: min(100vw, 700px);
