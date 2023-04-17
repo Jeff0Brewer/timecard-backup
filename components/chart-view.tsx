@@ -48,6 +48,7 @@ const ChartView: FC<ChartViewProps> = props => {
     useEffect(() => {
         const days = getDayList(props.minTime, props.maxTime)
         const data: { [job: string]: Array<number> } = {}
+        data.total = getDayTotals(days, props.entries)
         Object.entries(splitJobs(props.entries)).forEach(([job, entries]) => {
             data[job] = getDayTotals(days, entries)
         })
