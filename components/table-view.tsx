@@ -13,19 +13,45 @@ type TableViewProps = {
 }
 
 const TableView: FC<TableViewProps> = props => {
-    const getDayRows = (): Array<ReactElement> => {
+    const getDayRows = (entries: Array<EntryData>): Array<ReactElement> => {
         const days = []
-        for (let i = 0; i < props.entries.length; i += 2) {
+        for (let i = 0; i < entries.length; i += 2) {
             days.push(
                 <DayRow
-                    in={props.entries[i]}
-                    out={props.entries[i + 1]}
+                    in={entries[i]}
+                    out={entries[i + 1]}
                     delete={props.deleteEntries}
                     key={i}
                 />
             )
         }
         return days.reverse()
+    }
+
+    // split entry data into lists of single job
+    const splitJobs = (entries: Array<EntryData>): {[id: string]: Array<EntryData>} => {
+        const jobs: {[id: string]: Array<EntryData>} = {}
+        entries.forEach(entry => {
+            const job = entry?.jobLabel ? entry.jobLabel : 'untitled'
+            if (job in jobs) {
+                jobs[job].push(entry)
+            } else {
+                jobs[job] = [entry]
+            }
+        })
+        return jobs
+    }
+
+    // sum hours from list of entries
+    const getTotalHours = (entries: Array<EntryData>): number => {
+        let total = 0
+        // iterate through pairs of entries
+        for (let i = 0; i < entries.length; i += 2) {
+            const t0 = entries[i].date.getTime()
+            const t1 = entries[i + 1].date.getTime()
+            total += (t1 - t0) * MS_TO_HR
+        }
+        return total
     }
 
     return (
@@ -35,9 +61,21 @@ const TableView: FC<TableViewProps> = props => {
                 <section className={`${styles.placeholder} ${placeholder.style}`}></section>
             }
             content={
-                <section className={styles.wrap}>{
-                    getDayRows()
-                }</section>
+                <div>{
+                    Object.entries(splitJobs(props.entries)).map(([job, entries], i) =>
+                        <section key={i}>
+                            <span className={styles.top}>
+                                <h3 className={styles.header}>{job}</h3>
+                                <p className={styles.sum}>{
+                                    formatHours(getTotalHours(entries))
+                                }</p>
+                            </span>
+                            <div className={styles.table}>
+                                {getDayRows(entries)}
+                            </div>
+                        </section>
+                    )
+                }</div>
             }
         />
     )

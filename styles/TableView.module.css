@@ -1,20 +1,38 @@
-.wrap, .placeholder {
+.table, .placeholder {
     width: 100%;
-    padding: 20px;
+    padding: 5px 20px;
 }
 
 .placeholder {
     height: 200px;
 }
 
-.wrap {
+.table {
     position: relative;
     border-radius: var(--border-rad);
     background-color: #111;
     margin-bottom: 30px;
 }
 
-.wrap .row:last-child {
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+}
+
+.header {
+    font-weight: 500;
+    font-size: 20px;
+    text-transform: capitalize;
+}
+
+.sum {
+    font-size: 18px;
+    text-align: right;
+}
+
+.table .row:last-child {
     border: none;
 }
 
