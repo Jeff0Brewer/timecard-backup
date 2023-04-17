@@ -28,10 +28,6 @@
     font-weight: 500;
 }
 
-.clockIn, .clockInPlaceholder, .inputs {
-    max-width: 400px;
-}
-
 .clockIn:hover {
     background-color: #fff;
 }
