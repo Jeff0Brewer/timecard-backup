@@ -66,6 +66,7 @@ const ChartView: FC<ChartViewProps> = props => {
                     data: hours,
                     borderColor: color,
                     backgroundColor: color,
+                    borderWidth: 4,
                     tension: 0.3
                 }
             })
@@ -88,12 +89,10 @@ const ChartView: FC<ChartViewProps> = props => {
 }
 
 const JOB_COLORS = [
-    '#ffcb68',
-    '#9257e3',
-    '#447f73',
-    '#f00',
-    '#0f0',
-    '#00f'
+    '#fcd37a',
+    '#7d48c0',
+    '#ff6e90',
+    '#fff'
 ]
 
 Chart.register(CategoryScale, LinearScale, LineElement, PointElement)
@@ -104,7 +103,7 @@ const options: ChartOptions<'line'> = {
     maintainAspectRatio: false,
     elements: {
         point: {
-            radius: 3
+            radius: 2
         }
     },
     scales: {

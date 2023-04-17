@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;500&display=swap');
 
 :root {
-    --accent-color: #ffcb68;
+    --accent-color: #fcd37a;
     --border-rad: 4px;
     --hover-opacity: .7;
     --max-width: min(100vw, 700px);
