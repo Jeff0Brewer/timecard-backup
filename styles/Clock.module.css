@@ -28,6 +28,10 @@
     font-weight: 500;
 }
 
+.clockIn, .clockInPlaceholder, .inputs {
+    max-width: 400px;
+}
+
 .clockIn:hover {
     background-color: #fff;
 }
@@ -41,16 +45,12 @@
     margin: 10px;
 }
 
-.clockIn, .inputs {
-    max-width: 400px;
-}
-
-.labeledInput {
+.labeledInput, .labeledInputPlaceholder {
     position: relative;
     width: calc(50% - 5px);
 }
 
-.labeledInput label {
+.labeledInput label, .labeledInputPlaceholder label {
     position: absolute;
     left: 0;
     right: 0;
@@ -61,11 +61,14 @@
 }
 
 .labeledInput input {
+    background-color: #111;
+    border-radius: var(--border-rad);
+}
+
+.labeledInput input, .labeledInputPlaceholder input {
     width: 100%;
     font-size: 16px;
     line-height: 20px;
-    background-color: #111;
-    border-radius: var(--border-rad);
     padding: 25px 10px 10px 10px;
 }
 

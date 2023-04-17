@@ -116,11 +116,11 @@ const PLACEHOLDER = (
     <section className={styles.wrap}>
         <p className={`${placeholder.style} ${styles.datePlaceholder}`}>date</p>
         <div className={styles.inputs}>
-            <div className={`${placeholder.style} ${styles.labeledInput}`}>
+            <div className={`${placeholder.style} ${styles.labeledInputPlaceholder}`}>
                 <label>a</label>
                 <input type="text" />
             </div>
-            <div className={`${placeholder.style} ${styles.labeledInput}`}>
+            <div className={`${placeholder.style} ${styles.labeledInputPlaceholder}`}>
                 <label>b</label>
                 <input type="text" />
             </div>
