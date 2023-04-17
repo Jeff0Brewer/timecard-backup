@@ -55,6 +55,10 @@ const StartTime: FC<StartTimeProps> = props => {
     useEffect(() => {
         // update start time when last entry is clock out
         setUpdateTime(!props.lastEntry?.clockIn)
+        // set input value to last entry time if clocked in
+        if (props.lastEntry?.clockIn && inputRef.current) {
+            inputRef.current.value = formatTime(props.lastEntry.date)
+        }
     }, [props.lastEntry])
 
     useEffect(() => {
