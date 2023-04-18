@@ -32,9 +32,7 @@ const TableView: FC<TableViewProps> = props => {
     return (
         <Loader
             loaded={props.loaded}
-            placeholder={
-                <section className={`${styles.placeholder} ${placeholder.style}`}></section>
-            }
+            placeholder={PLACEHOLDER}
             content={
                 <div>{
                     Object.entries(splitJobs(props.entries)).map(([job, entries], i) =>
@@ -55,6 +53,20 @@ const TableView: FC<TableViewProps> = props => {
         />
     )
 }
+
+const PLACEHOLDER = (
+    <section>
+        <span className={styles.top}>
+            <h3 className={`${styles.header} ${placeholder.style}`}>
+                job label
+            </h3>
+            <p className={`${styles.sum} ${placeholder.style}`}>
+                0:00
+            </p>
+        </span>
+        <div className={`${styles.tablePlaceholder} ${placeholder.style}`}></div>
+    </section>
+)
 
 type DayRowProps = {
     in: EntryData,
