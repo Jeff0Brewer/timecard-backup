@@ -1,9 +1,9 @@
-.table, .placeholder {
+.table, .tablePlaceholder {
     width: 100%;
     padding: 5px 20px;
 }
 
-.placeholder {
+.tablePlaceholder {
     height: 200px;
 }
 
