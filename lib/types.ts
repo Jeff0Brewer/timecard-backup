@@ -2,7 +2,7 @@ type EntryData = {
     date: Date,
     clockIn: boolean,
     userEmail: string,
-    jobLabel?: string,
+    jobLabel?: string | null,
     id?: string
 }
 
