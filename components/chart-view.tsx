@@ -90,8 +90,8 @@ const ChartView: FC<ChartViewProps> = props => {
 
 const JOB_COLORS = [
     '#fcd37a',
-    '#7d48c0',
-    '#ff6e90',
+    '#fc003d',
+    '#00d33d',
     '#fff'
 ]
 
