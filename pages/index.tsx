@@ -24,7 +24,7 @@ export default function Home (): ReactElement {
                     <div>
                         <App userEmail={session.user.email} />
                         <button className={styles.signOut} onClick={(): void => { signOut() }}>
-                            log out
+                            Log Out
                         </button>
                     </div>
                 )

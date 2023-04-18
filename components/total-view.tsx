@@ -11,14 +11,15 @@ type TotalViewProps = {
 }
 
 const TotalView: FC<TotalViewProps> = props => {
+    const label = 'Total - '
     return (
         <Loader
             loaded={props.loaded}
             placeholder={
-                <p className={placeholder.style}>total - {formatHours(0)}</p>
+                <p className={placeholder.style}>{label + formatHours(0)}</p>
             }
             content={
-                <p>total - {formatHours(getTotalHours(props.entries))}</p>
+                <p>{label + formatHours(getTotalHours(props.entries))}</p>
             }
         />
     )
