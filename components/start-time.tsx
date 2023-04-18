@@ -1,28 +1,15 @@
-import React, { FC, useRef, useEffect } from 'react'
-import type { EntryData, CustomStart } from '@/lib/types'
-import { formatTime, getTwoDigitMinutes } from '@/lib/date'
+import React, { FC, useRef, useEffect, useState } from 'react'
+import type { EntryData } from '@/lib/types'
+import { formatTime, fromHourMinuteAmPm } from '@/lib/date'
 import styles from '@/styles/Clock.module.css'
 
 type StartTimeProps = {
     lastEntry: EntryData | null,
-    setCustomStart: (custom: CustomStart) => void
+    setCustomStart: (custom: Date) => void
 }
 
 const StartTime: FC<StartTimeProps> = props => {
-    return (
-        <span className={styles.startTime}>{
-            props.lastEntry?.clockIn
-                ? <p>started - {formatTime(props.lastEntry.date)}</p>
-                : <StartInput setCustomStart={props.setCustomStart} />
-        }</span>
-    )
-}
-
-type StartInputProps = {
-    setCustomStart: (custom: CustomStart) => void
-}
-
-const StartInput: FC<StartInputProps> = props => {
+    const [updateTime, setUpdateTime] = useState<boolean>(true)
     const inputRef = useRef<HTMLInputElement>(null)
     const lastValidRef = useRef<string>(formatTime(new Date()))
     const revertTimerRef = useRef<number>(-1)
@@ -31,38 +18,58 @@ const StartInput: FC<StartInputProps> = props => {
     const updateCustomStart = (e: React.ChangeEvent<HTMLInputElement>): void => {
         // revert start time to last valid entry after delay
         window.clearTimeout(revertTimerRef.current)
-        revertTimerRef.current = window.setTimeout(revertInvalid, 3000)
+        revertTimerRef.current = window.setTimeout(() => {
+            if (inputRef.current) {
+                inputRef.current.value = lastValidRef.current
+            }
+        }, 3000)
 
         // parse hour, minute, am/pm from text input
-        const str = e.target.value
+        const str = e.target.value.toLowerCase()
         const match = str.match(/(\d{1,2}):(\d{2}) ?([ap]m)/)
-        if (match && match.length === 4) {
-            const hour = parseInt(match[1])
-            const minute = parseInt(match[2]) // trailing non-numeric chars ignored
-            const ampm = match[3]
-            if (
-                hour >= 0 && hour <= 12 &&
-                minute >= 0 && minute <= 60
-            ) {
-                const custom: CustomStart = { hour, minute, ampm }
-                lastValidRef.current = `${hour}:${getTwoDigitMinutes(minute)} ${ampm}`
-                props.setCustomStart(custom)
-                // stop start time value updates since custom entered
-                window.clearInterval(updateIntervalRef.current)
-            }
-        }
-    }
+        if (!match || match.length !== 4) { return }
+        const hour = parseInt(match[1])
+        const minute = parseInt(match[2]) // trailing non-numeric chars ignored
+        const ampm = match[3]
 
-    const revertInvalid = (): void => {
-        if (inputRef.current) {
-            inputRef.current.value = lastValidRef.current
+        // set date from matched values
+        if (
+            hour >= 0 && hour <= 12 &&
+            minute >= 0 && minute <= 60
+        ) {
+            const custom = fromHourMinuteAmPm(hour, minute, ampm)
+            lastValidRef.current = formatTime(custom)
+            props.setCustomStart(custom)
+            // stop start time updates since custom entered
+            setUpdateTime(false)
         }
     }
 
     useEffect(() => {
-        // start interval to update start time value to curr time until custom entered
+        // clear revert timeout on unmount
+        return () => {
+            window.clearTimeout(revertTimerRef.current)
+        }
+    }, [])
+
+    useEffect(() => {
+        // update start time when last entry is clock out
+        setUpdateTime(!props.lastEntry?.clockIn)
+        // set input value to last entry time if clocked in
+        if (props.lastEntry?.clockIn && inputRef.current) {
+            inputRef.current.value = formatTime(props.lastEntry.date)
+        }
+    }, [props.lastEntry])
+
+    useEffect(() => {
+        if (!updateTime) { return }
+        // immediately update start time to current
+        if (inputRef.current) {
+            inputRef.current.value = formatTime(new Date())
+        }
+        // start interval to update start time
         updateIntervalRef.current = window.setInterval(() => {
-            // only update if input element doesn't have focus
+            // only update if input doesn't have focus
             if (inputRef.current && document.activeElement !== inputRef.current) {
                 const time = formatTime(new Date())
                 inputRef.current.value = time
@@ -70,22 +77,21 @@ const StartInput: FC<StartInputProps> = props => {
             }
         }, 5000)
         return () => {
-            window.clearTimeout(revertTimerRef.current)
             window.clearInterval(updateIntervalRef.current)
         }
-    }, [])
+    }, [updateTime])
 
     return (
-        <>
-            <p>start time:</p>
+        <div className={`${styles.labeledInput} ${props.lastEntry?.clockIn ? styles.inactive : ''}`}>
+            <label htmlFor="input">start time</label>
             <input
-                type="text"
+                id="input"
                 ref={inputRef}
-                className={styles.startInput}
-                onInput={updateCustomStart}
+                type="text"
                 defaultValue={lastValidRef.current}
+                onInput={updateCustomStart}
             />
-        </>
+        </div>
     )
 }
 

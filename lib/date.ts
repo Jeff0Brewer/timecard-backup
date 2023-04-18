@@ -1,5 +1,3 @@
-import type { CustomStart } from '@/lib/types'
-
 const WEEKDAYS = [
     'Sun',
     'Mon',
@@ -92,10 +90,16 @@ const getPrevWeek = (date: Date): Date => {
     return date
 }
 
-const fromCustom = (custom: CustomStart): Date => {
-    const hours = (custom.hour % 12) + (custom.ampm === 'pm' ? 12 : 0)
+const fromHourMinuteAmPm = (hour: number, minute: number, ampm: string): Date => {
+    const hours = (hour % 12) + (ampm === 'pm' ? 12 : 0)
     const now = new Date()
-    return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, custom.minute)
+    return new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        hours,
+        minute
+    )
 }
 
 const getTwoDigitMinutes = (minutes: number): string => {
@@ -112,7 +116,7 @@ export {
     getDayStart,
     getDayEnd,
     getPrevWeek,
-    fromCustom,
+    fromHourMinuteAmPm,
     getTwoDigitMinutes,
     MS_TO_HR,
     MS_PER_DAY

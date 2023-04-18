@@ -1,9 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/react'
-import type { EntryData, EntryResponse } from '@/lib/types'
-import { isEntryData } from '@/lib/types'
+import type { EntryData, EntryResponse, JobData, JobResponse } from '@/lib/types'
 
-const hasSession = async (req: NextApiRequest, res: NextApiResponse<EntryResponse>): Promise<boolean> => {
+const hasSession = async (req: NextApiRequest, res: NextApiResponse): Promise<boolean> => {
     const session = await getSession({ req })
     if (!session) {
         res.status(401).json({ message: 'Unauthorized request' })
@@ -12,41 +11,9 @@ const hasSession = async (req: NextApiRequest, res: NextApiResponse<EntryRespons
     return true
 }
 
-const isPost = (req: NextApiRequest, res: NextApiResponse<EntryResponse>): boolean => {
-    if (req.method !== 'POST') {
-        res.status(405).json({ message: 'Must use POST request' })
-        return false
-    }
-    return true
-}
-
-const hasEmail = (req: NextApiRequest, res: NextApiResponse<EntryResponse>): boolean => {
-    if (typeof req.body?.userEmail !== 'string') {
-        res.status(405).json({ message: 'Must send user email' })
-        return false
-    }
-    return true
-}
-
-const hasTimeBounds = (req: NextApiRequest, res: NextApiResponse<EntryResponse>): boolean => {
-    if (typeof req.body?.minTime !== 'string' || typeof req.body?.maxTime !== 'string') {
-        res.status(405).json({ message: 'Must send time bounds' })
-        return false
-    }
-    return true
-}
-
-const hasEntry = (req: NextApiRequest, res: NextApiResponse<EntryResponse>): boolean => {
-    if (!isEntryData(req.body)) {
-        res.status(405).json({ message: 'Must send entry data' })
-        return false
-    }
-    return true
-}
-
-const hasIds = (req: NextApiRequest, res: NextApiResponse<EntryResponse>): boolean => {
-    if (!Array.isArray(req.body?.ids)) {
-        res.status(405).json({ message: 'Must send id array' })
+const hasFields = <T>(req: NextApiRequest, res: NextApiResponse): boolean => {
+    if (!(req as any satisfies T)) {
+        res.status(405).json({ message: 'Invalid request content' })
         return false
     }
     return true
@@ -66,15 +33,18 @@ const postBody = (data: object): PostBody => {
     }
 }
 
-const handleEntryResponse = async (res: Response): Promise<Array<EntryData>> => {
-    const entryResponse: EntryResponse = await res.json()
-    // check and log errors
+// get data from response, log error messages
+const checkResponseError = async (res: Response): Promise<any> => {
+    const data = await res.json()
     if (!res.ok) {
-        const message = 'message' in entryResponse
-            ? entryResponse.message
-            : 'failed'
-        throw new Error(`Api Error ${res.status}: ${message}`)
+        const message = 'message' in data ? data.message : 'failed'
+        throw new Error(`Error ${res.status}: ${message}`)
     }
+    return data
+}
+
+const handleEntryResponse = async (res: Response): Promise<Array<EntryData>> => {
+    const entryResponse: EntryResponse = await checkResponseError(res)
     // return empty list of entries if success and message
     if ('message' in entryResponse) {
         return []
@@ -86,13 +56,18 @@ const handleEntryResponse = async (res: Response): Promise<Array<EntryData>> => 
     })
 }
 
+const handleJobResponse = async (res: Response): Promise<Array<JobData>> => {
+    const jobResponse: JobResponse = await checkResponseError(res)
+    if ('message' in jobResponse) {
+        return []
+    }
+    return jobResponse.data
+}
+
 export {
     hasSession,
-    isPost,
-    hasEmail,
-    hasTimeBounds,
-    hasEntry,
-    hasIds,
+    hasFields,
     handleEntryResponse,
+    handleJobResponse,
     postBody
 }

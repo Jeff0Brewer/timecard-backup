@@ -14,26 +14,6 @@
     width: 90%;
 }
 
-.startTime {
-    display: flex;
-    align-items: center;
-}
-
-.startTime, .startTimePlaceholder {
-    font-size: 18px;
-    margin: 15px;
-}
-
-.startTimePlaceholder {
-    width: 50%;
-}
-
-.startInput {
-    width: 80px;
-    font-size: inherit;
-    text-align: right;
-}
-
 .clockIn {
     color: #000;
     border-radius: var(--border-rad);
@@ -50,4 +30,73 @@
 
 .clockIn:hover {
     background-color: #fff;
+}
+
+.inputs {
+    position: relative;
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    justify-content: center;
+    margin: 10px;
+}
+
+.labeledInput, .labeledInputPlaceholder {
+    position: relative;
+    width: calc(50% - 5px);
+}
+
+.labeledInput label, .labeledInputPlaceholder label {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 10px;
+    font-size: 12px;
+    text-transform: capitalize;
+    pointer-events: none;
+}
+
+.labeledInput input {
+    background-color: #111;
+    border-radius: var(--border-rad);
+}
+
+.labeledInput input, .labeledInputPlaceholder input {
+    width: 100%;
+    font-size: 16px;
+    line-height: 20px;
+    padding: 25px 10px 10px 10px;
+}
+
+.inactive, .inactive * {
+    pointer-events: none;
+}
+
+.inactive input {
+    color: #888;
+}
+
+.dropWrap {
+    position: absolute;
+    bottom: 5px;
+    height: 0;
+    width: 100%;
+}
+
+.dropList {
+    display: flex;
+    flex-direction: column;
+    border-radius: 0 0 var(--border-rad) var(--border-rad);
+    overflow: hidden;
+    background-color: #111;
+}
+
+.dropList a {
+    line-height: 35px;
+    padding: 0 10px;
+    border-top: 1px solid var(--border-color);
+}
+
+.dropList a:hover {
+    background-color: #222;
 }

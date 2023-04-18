@@ -1,22 +1,23 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { EntryResponse } from '@/lib/types'
 import prisma from '@/prisma/client'
-import { hasSession, hasIds, isPost } from '@/lib/api'
+import { hasSession, hasFields } from '@/lib/api'
+
+type DeleteEntriesRequest = {
+    method: 'POST',
+    body: {
+        ids: Array<string>
+    }
+}
 
 const deleteEntries = async (
     req: NextApiRequest,
     res: NextApiResponse<EntryResponse>
 ): Promise<void> => {
-    if (!(await hasSession(req, res))) {
-        // require current session
-        return
-    }
-    if (!isPost(req, res) || !hasIds(req, res)) {
-        // require post request with list of ids
-        return
-    }
+    const authorized = await hasSession(req, res)
+    const complete = hasFields<DeleteEntriesRequest>(req, res)
+    if (!authorized || !complete) { return }
 
-    // delete entries, return status
     const deleted = await prisma.timeEntry?.deleteMany({
         where: { id: { in: req.body.ids } }
     })

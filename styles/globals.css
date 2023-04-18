@@ -1,9 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;500&display=swap');
 
 :root {
+    --accent-color: #fcd37a;
+    --border-color: #333;
     --border-rad: 4px;
     --hover-opacity: .7;
-    --accent-color: #ffcb68;
     --max-width: min(100vw, 700px);
     --app-padding: 10px;
 }
@@ -12,27 +13,20 @@
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+}
+
+html, body {
     font-family: Arial, Helvetica, sans-serif;
     font-family: 'ubuntu', sans-serif;
     font-weight: 300;
-    color: #fff;
-}
-
-body {
     background-color: #050505;
     color: #fff;
 }
 
 input, button {
     cursor: pointer;
-}
-
-input {
     border: none;
     background-color: transparent;
-}
-
-button {
-    border: none;
-    background-color: transparent;
+    font: inherit;
+    color: inherit;
 }

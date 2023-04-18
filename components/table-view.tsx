@@ -2,6 +2,7 @@ import React, { FC, useState, ReactElement } from 'react'
 import { RiDeleteBackFill } from 'react-icons/ri'
 import type { EntryData } from '@/lib/types'
 import { formatMed, formatTimeShort, formatHours, MS_TO_HR } from '@/lib/date'
+import { splitJobs, getTotalHours } from '@/lib/entry'
 import Loader from '@/components/loader'
 import styles from '@/styles/TableView.module.css'
 import placeholder from '@/styles/Placeholder.module.css'
@@ -13,13 +14,13 @@ type TableViewProps = {
 }
 
 const TableView: FC<TableViewProps> = props => {
-    const getDayRows = (): Array<ReactElement> => {
+    const getDayRows = (entries: Array<EntryData>): Array<ReactElement> => {
         const days = []
-        for (let i = 0; i < props.entries.length; i += 2) {
+        for (let i = 0; i < entries.length; i += 2) {
             days.push(
                 <DayRow
-                    in={props.entries[i]}
-                    out={props.entries[i + 1]}
+                    in={entries[i]}
+                    out={entries[i + 1]}
                     delete={props.deleteEntries}
                     key={i}
                 />
@@ -31,17 +32,41 @@ const TableView: FC<TableViewProps> = props => {
     return (
         <Loader
             loaded={props.loaded}
-            placeholder={
-                <section className={`${styles.placeholder} ${placeholder.style}`}></section>
-            }
+            placeholder={PLACEHOLDER}
             content={
-                <section className={styles.wrap}>{
-                    getDayRows()
-                }</section>
+                <div>{
+                    Object.entries(splitJobs(props.entries)).map(([job, entries], i) =>
+                        <section key={i}>
+                            <span className={styles.top}>
+                                <h3 className={styles.header}>{job}</h3>
+                                <p className={styles.sum}>{
+                                    formatHours(getTotalHours(entries))
+                                }</p>
+                            </span>
+                            <div className={styles.table}>
+                                {getDayRows(entries)}
+                            </div>
+                        </section>
+                    )
+                }</div>
             }
         />
     )
 }
+
+const PLACEHOLDER = (
+    <section>
+        <span className={styles.top}>
+            <h3 className={`${styles.header} ${placeholder.style}`}>
+                job label
+            </h3>
+            <p className={`${styles.sum} ${placeholder.style}`}>
+                0:00
+            </p>
+        </span>
+        <div className={`${styles.tablePlaceholder} ${placeholder.style}`}></div>
+    </section>
+)
 
 type DayRowProps = {
     in: EntryData,

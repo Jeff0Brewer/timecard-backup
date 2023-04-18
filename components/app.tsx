@@ -2,9 +2,9 @@ import React, { FC, useState, useEffect } from 'react'
 import type { EntryData } from '@/lib/types'
 import Clock from '@/components/clock'
 import DateBounds from '@/components/date-bounds'
-import HourView from '@/components/hour-view'
 import ChartView from '@/components/chart-view'
 import TableView from '@/components/table-view'
+import TotalView from '@/components/total-view'
 import { getDayEnd, getPrevWeek } from '@/lib/date'
 import { postBody, handleEntryResponse } from '@/lib/api'
 import styles from '@/styles/App.module.css'
@@ -14,7 +14,7 @@ type AppProps = {
 }
 
 const App: FC<AppProps> = props => {
-    const [visibleEntries, setVisibleEntries] = useState<Array<EntryData>>([])
+    const [entries, setEntries] = useState<Array<EntryData>>([])
     const [maxTime, setMaxTime] = useState<Date>(getDayEnd(new Date()))
     const [minTime, setMinTime] = useState<Date>(getPrevWeek(new Date()))
     const [loaded, setLoaded] = useState<boolean>(false)
@@ -34,7 +34,7 @@ const App: FC<AppProps> = props => {
         if (entries.length % 2 !== 0) {
             entries.pop()
         }
-        setVisibleEntries(entries)
+        setEntries(entries)
         setLoaded(true)
     }
 
@@ -42,7 +42,7 @@ const App: FC<AppProps> = props => {
         const res = await fetch('/api/delete-entries', postBody({ ids }))
         await handleEntryResponse(res) // no return value
         // remove deleted entries on success
-        setVisibleEntries(visibleEntries.filter((entry) =>
+        setEntries(entries.filter((entry) =>
             !(entry?.id && ids.includes(entry.id))
         ))
     }
@@ -65,19 +65,19 @@ const App: FC<AppProps> = props => {
                     setMax={setMaxTime}
                     loaded={loaded}
                 />
-                <HourView
-                    entries={visibleEntries}
+                <TotalView
+                    entries={entries}
                     loaded={loaded}
                 />
             </span>
             <ChartView
-                entries={visibleEntries}
+                entries={entries}
                 minTime={minTime}
                 maxTime={maxTime}
                 loaded={loaded}
             />
             <TableView
-                entries={visibleEntries}
+                entries={entries}
                 deleteEntries={deleteEntries}
                 loaded={loaded}
             />

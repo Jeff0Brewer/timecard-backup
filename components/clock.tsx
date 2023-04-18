@@ -1,27 +1,24 @@
 import React, { FC, useState, useEffect } from 'react'
-import type { EntryData, CustomStart } from '@/lib/types'
-import { formatLong, fromCustom } from '@/lib/date'
-import { postBody, handleEntryResponse } from '@/lib/api'
+import type { EntryData, JobData } from '@/lib/types'
+import { formatLong } from '@/lib/date'
+import { postBody, handleEntryResponse, handleJobResponse } from '@/lib/api'
 import StartTime from '@/components/start-time'
+import JobLabel from '@/components/job-label'
 import Loader from '@/components/loader'
 import styles from '@/styles/Clock.module.css'
 import placeholder from '@/styles/Placeholder.module.css'
 
-type ClockInProps = {
+type ClockProps = {
     userEmail: string,
     updateTimecard: () => void
 }
 
-const ClockIn: FC<ClockInProps> = props => {
+const Clock: FC<ClockProps> = props => {
     const [displayTime, setDisplayTime] = useState<Date>(new Date())
     const [lastEntry, setLastEntry] = useState<EntryData | null>(null)
-    const [customStart, setCustomStart] = useState<CustomStart | null>(null)
-
-    const getLastEntry = async (): Promise<void> => {
-        const res = await fetch('/api/get-last-entry', postBody({ userEmail: props.userEmail }))
-        const entries = await handleEntryResponse(res)
-        setLastEntry(entries[0])
-    }
+    const [customStart, setCustomStart] = useState<Date | null>(null)
+    const [jobs, setJobs] = useState<Array<string>>([])
+    const [jobLabel, setJobLabel] = useState<string>('')
 
     // clock in / out based on current clock state
     const clockIn = async (): Promise<void> => {
@@ -30,27 +27,54 @@ const ClockIn: FC<ClockInProps> = props => {
 
         let date: Date = new Date()
         // use custom start time if valid date provided
-        if (!lastEntry.clockIn && customStart) {
-            const customDate = fromCustom(customStart)
-            if (customDate > date && customDate > lastEntry.date) {
-                date = customDate
-            }
+        if (
+            !lastEntry.clockIn && customStart &&
+            customStart > date && customStart < lastEntry.date
+        ) {
+            date = customStart
         }
+
         // prevent clocking out before clock in time
         if (lastEntry.clockIn && date < lastEntry.date) {
             date = new Date(lastEntry.date.getTime() + 1)
         }
 
-        const entry: EntryData = {
+        // create new job if label doesn't exist
+        if (jobLabel && !jobs.includes(jobLabel)) {
+            createJob({
+                label: jobLabel,
+                userEmail: props.userEmail
+            })
+        }
+
+        // create new entry
+        createEntry({
             date,
+            jobLabel,
             clockIn: !lastEntry.clockIn,
             userEmail: props.userEmail
-        }
-        const res = await fetch('/api/add-entry', postBody(entry))
+        })
+    }
+
+    const createJob = async (job: JobData): Promise<void> => {
+        const res = await fetch('/api/add-job', postBody({ job }))
+        const newJobs = await handleJobResponse(res)
+        const label = newJobs[0].label
+        setJobs([...jobs, label])
+    }
+
+    const createEntry = async (entry: EntryData): Promise<void> => {
+        const res = await fetch('/api/add-entry', postBody({ entry }))
         const entries = await handleEntryResponse(res)
         setLastEntry(entries[0])
         setCustomStart(null)
         props.updateTimecard()
+    }
+
+    const getLastEntry = async (): Promise<void> => {
+        const res = await fetch('/api/get-last-entry', postBody({ userEmail: props.userEmail }))
+        const entries = await handleEntryResponse(res)
+        setLastEntry(entries[0])
     }
 
     useEffect(() => {
@@ -60,23 +84,49 @@ const ClockIn: FC<ClockInProps> = props => {
     }, [])
 
     return (
-        <Loader loaded={!!lastEntry}
-            placeholder={
-                <section className={styles.wrap}>
-                    <p className={`${placeholder.style} ${styles.datePlaceholder}`}>date</p>
-                    <p className={`${placeholder.style} ${styles.startTimePlaceholder}`}>start</p>
-                    <div className={`${placeholder.style} ${styles.clockInPlaceholder}`}>clockin</div>
-                </section>
-            }
+        <Loader
+            loaded={!!lastEntry}
+            placeholder={PLACEHOLDER}
             content={
                 <section className={styles.wrap}>
                     <p className={styles.date}>{formatLong(displayTime)}</p>
-                    <StartTime lastEntry={lastEntry} setCustomStart={setCustomStart} />
-                    <button className={styles.clockIn} onClick={clockIn}>Clock {lastEntry?.clockIn ? 'Out' : 'In'}</button>
+                    <div className={styles.inputs}>
+                        <JobLabel
+                            lastEntry={lastEntry}
+                            userEmail={props.userEmail}
+                            jobs={jobs}
+                            setJobs={setJobs}
+                            setJobLabel={setJobLabel}
+                        />
+                        <StartTime
+                            lastEntry={lastEntry}
+                            setCustomStart={setCustomStart}
+                        />
+                    </div>
+                    <button className={styles.clockIn} onClick={clockIn}>
+                        Clock {lastEntry?.clockIn ? 'Out' : 'In'}
+                    </button>
                 </section>
             }
         />
     )
 }
 
-export default ClockIn
+const PLACEHOLDER = (
+    <section className={styles.wrap}>
+        <p className={`${placeholder.style} ${styles.datePlaceholder}`}>date</p>
+        <div className={styles.inputs}>
+            <div className={`${placeholder.style} ${styles.labeledInputPlaceholder}`}>
+                <label>a</label>
+                <input type="text" />
+            </div>
+            <div className={`${placeholder.style} ${styles.labeledInputPlaceholder}`}>
+                <label>b</label>
+                <input type="text" />
+            </div>
+        </div>
+        <div className={`${placeholder.style} ${styles.clockInPlaceholder}`}>clockin</div>
+    </section>
+)
+
+export default Clock

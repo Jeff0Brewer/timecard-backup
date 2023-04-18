@@ -3,6 +3,7 @@ import type { ChartData, ChartOptions } from 'chart.js'
 import { Chart, CategoryScale, LinearScale, LineElement, PointElement } from 'chart.js'
 import { Line } from 'react-chartjs-2'
 import type { EntryData } from '@/lib/types'
+import { splitJobs } from '@/lib/entry'
 import { formatShort, MS_TO_HR, MS_PER_DAY } from '@/lib/date'
 import Loader from '@/components/loader'
 import styles from '@/styles/ChartView.module.css'
@@ -18,33 +19,57 @@ type ChartViewProps = {
 const ChartView: FC<ChartViewProps> = props => {
     const [data, setData] = useState<ChartData<'line'>>({ datasets: [] })
 
+    // get list of date strings for days in date range
+    const getDayList = (min: Date, max: Date): Array<string> => {
+        const days = []
+        const minMs = min.getTime()
+        const maxMs = max.getTime()
+        for (let t = minMs; t < maxMs; t += MS_PER_DAY) {
+            days.push(formatShort(new Date(t)))
+        }
+        return days
+    }
+
+    const getDayTotals = (days: Array<string>, entries: Array<EntryData>): Array<number> => {
+        // make map from date string to hours to bin entries into single days
+        const data: { [day: string]: number } = {}
+        days.forEach(day => { data[day] = 0 })
+        // iterate through pairs, adding total to entry's date bin
+        for (let i = 0; i < entries.length; i += 2) {
+            const day = formatShort(entries[i].date)
+            const t0 = entries[i].date.getTime()
+            const t1 = entries[i + 1].date.getTime()
+            data[day] += (t1 - t0) * MS_TO_HR
+        }
+        return Object.values(data)
+    }
+
     // set chart data on change to entries prop
     useEffect(() => {
-        const data: {[id: string]: number} = {}
-        // add date strings for current bounds as keys to data dict
-        const minMs = props.minTime.getTime()
-        const maxMs = props.maxTime.getTime()
-        for (let t = minMs; t <= maxMs; t += MS_PER_DAY) {
-            const date = formatShort(new Date(t))
-            data[date] = 0
+        const days = getDayList(props.minTime, props.maxTime)
+        const data: { [job: string]: Array<number> } = {}
+        const split = splitJobs(props.entries)
+        // add total if > 1 job or no current data
+        if (Object.keys(split).length !== 1) {
+            data.total = getDayTotals(days, props.entries)
         }
-        // add total hours for each entry pair to data dict
-        for (let i = 0; i < props.entries.length; i += 2) {
-            // use date of clock in as key
-            const date = formatShort(props.entries[i].date)
-            const t0 = props.entries[i].date.getTime()
-            const t1 = props.entries[i + 1].date.getTime()
-            const hours = (t1 - t0) * MS_TO_HR
-            data[date] += hours
-        }
+        // get data for individual jobs
+        Object.entries(splitJobs(props.entries)).forEach(([job, entries]) => {
+            data[job] = getDayTotals(days, entries)
+        })
         setData({
-            labels: Object.keys(data),
-            datasets: [{
-                data: Object.values(data),
-                borderColor: '#ffcb68',
-                backgroundColor: '#fff',
-                tension: 0.3
-            }]
+            labels: days,
+            datasets: Object.entries(data).map(([job, hours], i) => {
+                const color = JOB_COLORS[i % JOB_COLORS.length]
+                return {
+                    label: job,
+                    data: hours,
+                    borderColor: color,
+                    backgroundColor: color,
+                    borderWidth: 4,
+                    tension: 0.3
+                }
+            })
         })
     }, [props.entries])
 
@@ -63,6 +88,13 @@ const ChartView: FC<ChartViewProps> = props => {
     )
 }
 
+const JOB_COLORS = [
+    '#fcd37a',
+    '#fc003d',
+    '#00d33d',
+    '#fff'
+]
+
 Chart.register(CategoryScale, LinearScale, LineElement, PointElement)
 Chart.defaults.color = '#fff'
 
@@ -71,7 +103,7 @@ const options: ChartOptions<'line'> = {
     maintainAspectRatio: false,
     elements: {
         point: {
-            radius: 4
+            radius: 2
         }
     },
     scales: {
